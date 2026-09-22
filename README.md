@@ -33,8 +33,8 @@ Prove the boundary before trusting it.
 - **Clean lifecycle** - Removes plugin-owned options, schedules, and
   capabilities while preserving content, media, Codex, and external credentials.
 - **GitHub automation** - Checks plugin and docs changes, builds ZIP artifacts,
-  deploys documentation, opens dependency updates, and publishes tagged
-  releases that WordPress can discover through its native update system.
+  deploys documentation, opens dependency updates, and publishes tagged releases
+  that WordPress can discover through its native update system.
 
 This staging alpha does not authenticate, generate content, alter Divi controls,
 or claim WordPress.org approval. See the
