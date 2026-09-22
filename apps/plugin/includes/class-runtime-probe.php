@@ -134,10 +134,8 @@ final class Runtime_Probe {
 		}
 
 		if ( ! $timed_out ) {
-			stream_set_blocking( $pipes[1], true );
-			stream_set_blocking( $pipes[2], true );
-			$this->drain_remainder( $pipes[1], $stdout, $max_output_bytes, $truncated );
-			$this->drain_remainder( $pipes[2], $stderr, self::MAX_OUTPUT_BYTES );
+			$this->drain_available( $pipes[1], $stdout, $max_output_bytes, $truncated );
+			$this->drain_available( $pipes[2], $stderr, self::MAX_OUTPUT_BYTES );
 		}
 		fclose( $pipes[1] ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Process pipe, not WordPress content.
 		fclose( $pipes[2] ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Process pipe, not WordPress content.
@@ -208,20 +206,21 @@ final class Runtime_Probe {
 	}
 
 	/**
-	 * Read the bytes left in a closed process pipe without exceeding the cap.
+	 * Drain only bytes already available after the direct process exits.
 	 *
 	 * @param resource $stream Process pipe.
 	 */
-	private function drain_remainder( mixed $stream, string &$output, int $max_output_bytes, ?bool &$truncated = null ): void {
-		$remaining = max( 0, $max_output_bytes - strlen( $output ) );
-		$chunk     = stream_get_contents( $stream, $remaining + 1 );
-		if ( false === $chunk || '' === $chunk ) {
-			return;
-		}
+	private function drain_available( mixed $stream, string &$output, int $max_output_bytes, ?bool &$truncated = null ): void {
+		$remaining_reads = (int) ceil( max( 0, $max_output_bytes - strlen( $output ) ) / self::READ_CHUNK_BYTES ) + 1;
 
-		$output .= substr( $chunk, 0, $remaining );
-		if ( strlen( $chunk ) > $remaining && null !== $truncated ) {
-			$truncated = true;
+		while ( $remaining_reads > 0 ) {
+			$before = strlen( $output );
+			$this->drain_stream( $stream, $output, $max_output_bytes, $truncated );
+			--$remaining_reads;
+
+			if ( strlen( $output ) === $before || true === $truncated ) {
+				break;
+			}
 		}
 	}
 

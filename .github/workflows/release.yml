@@ -111,10 +111,11 @@ jobs:
       - name: Publish GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PLUGIN_VERSION: ${{ needs.package.outputs.version }}
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
           gh release create "$RELEASE_TAG" \
-            "release-artifact/promptbridge-for-divi-${{ needs.package.outputs.version }}.zip" \
+            "release-artifact/promptbridge-for-divi-${PLUGIN_VERSION}.zip" \
             --repo "$GITHUB_REPOSITORY" \
             --title "$RELEASE_TAG" \
             --generate-notes \

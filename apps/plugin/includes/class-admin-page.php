@@ -149,7 +149,13 @@ final class Admin_Page {
 				$settings['service_consent'] = $consent;
 				$settings['model']           = $model;
 				update_option( Plugin::OPTION_SETTINGS, $settings, false );
-				$notice_code = $consent ? 'consent_saved' : 'consent_withdrawn';
+				$stored      = get_option( Plugin::OPTION_SETTINGS, array() );
+				$saved       = is_array( $stored )
+					&& (bool) ( $stored['service_consent'] ?? false ) === $consent
+					&& ( $stored['model'] ?? '' ) === $model;
+				$notice_code = $saved
+					? ( $consent ? 'consent_saved' : 'consent_withdrawn' )
+					: 'settings_save_failed';
 			}
 		} elseif ( 'run_diagnostics' === $action ) {
 			$tab = 'diagnostics';
@@ -197,6 +203,7 @@ final class Admin_Page {
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 		$notices     = array(
 			'invalid_model'        => array( 'error', __( 'Choose one of the supported models.', 'promptbridge-for-divi' ) ),
+			'settings_save_failed' => array( 'error', __( 'PromptBridge could not save those settings. Try again.', 'promptbridge-for-divi' ) ),
 			'consent_saved'        => array( 'success', __( 'Service consent and model saved.', 'promptbridge-for-divi' ) ),
 			'consent_withdrawn'    => array( 'success', __( 'Service consent withdrawn. Codex will not be launched.', 'promptbridge-for-divi' ) ),
 			'diagnostics_finished' => array( 'info', __( 'Diagnostics finished.', 'promptbridge-for-divi' ) ),

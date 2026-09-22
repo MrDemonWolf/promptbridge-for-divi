@@ -111,4 +111,27 @@ SH
 			unlink( $fixture );
 		}
 	}
+
+	public function test_does_not_wait_for_a_descendant_holding_output_pipes(): void {
+		if ( ! function_exists( 'proc_open' ) || '\\' === DIRECTORY_SEPARATOR ) {
+			self::markTestSkipped( 'This descendant fixture requires proc_open on a Unix-like host.' );
+		}
+
+		$fixture = tempnam( sys_get_temp_dir(), 'mdw-pbd-' );
+		self::assertIsString( $fixture );
+		file_put_contents(
+			$fixture,
+			"#!/bin/sh\n(sleep 2) &\nprintf '%s' '{\"models\":[]}'\n"
+		);
+		chmod( $fixture, 0700 );
+
+		try {
+			$started = microtime( true );
+			$result  = ( new Runtime_Probe() )->models( $fixture, sys_get_temp_dir() );
+			self::assertTrue( $result['ok'], $result['message'] );
+			self::assertLessThan( 1.0, microtime( true ) - $started );
+		} finally {
+			unlink( $fixture );
+		}
+	}
 }
