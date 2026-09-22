@@ -267,11 +267,15 @@ final class Admin_Page {
 						<div class="mdw-pbd-option-row">
 							<div class="mdw-pbd-option-copy">
 								<label for="mdw-pbd-model"><?php esc_html_e( 'Default model', 'promptbridge-for-divi' ); ?></label>
-								<p><?php esc_html_e( 'Run Diagnostics refreshes this list from the installed Codex runtime. Luna remains the safe fallback.', 'promptbridge-for-divi' ); ?></p>
+								<p id="mdw-pbd-model-help">
+									<?php esc_html_e( 'Run Diagnostics refreshes this list from the installed Codex runtime. Usage estimates compare current ChatGPT token credit rates with Luna; actual use varies by task, context, reasoning, and tools.', 'promptbridge-for-divi' ); ?>
+									<a href="https://learn.chatgpt.com/docs/pricing" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'View OpenAI pricing', 'promptbridge-for-divi' ); ?></a>
+								</p>
 							</div>
-							<select id="mdw-pbd-model" name="mdw_pbd_model">
+							<select id="mdw-pbd-model" name="mdw_pbd_model" aria-describedby="mdw-pbd-model-help">
 								<?php foreach ( Plugin::supported_models() as $model_id => $model_label ) : ?>
-									<option value="<?php echo esc_attr( $model_id ); ?>" <?php selected( Plugin::selected_model(), $model_id ); ?>><?php echo esc_html( $model_label ); ?><?php echo Plugin::DEFAULT_MODEL === $model_id ? esc_html__( ' — Recommended', 'promptbridge-for-divi' ) : ''; ?></option>
+									<?php $usage_ratio = Model_Catalog::credit_rate_vs_luna( $model_id ); ?>
+									<option value="<?php echo esc_attr( $model_id ); ?>" <?php selected( Plugin::selected_model(), $model_id ); ?>><?php echo esc_html( $model_label ); ?><?php echo '1' === $usage_ratio ? esc_html__( ' — Lowest usage', 'promptbridge-for-divi' ) : ''; ?><?php echo null !== $usage_ratio && '1' !== $usage_ratio ? esc_html( sprintf( /* translators: %s: model usage rate relative to GPT-5.6 Luna. */ __( ' — About %s× Luna usage', 'promptbridge-for-divi' ), $usage_ratio ) ) : ''; ?><?php echo null === $usage_ratio ? esc_html__( ' — Usage varies', 'promptbridge-for-divi' ) : ''; ?><?php echo Plugin::DEFAULT_MODEL === $model_id ? esc_html__( ' — Recommended', 'promptbridge-for-divi' ) : ''; ?></option>
 								<?php endforeach; ?>
 							</select>
 						</div>

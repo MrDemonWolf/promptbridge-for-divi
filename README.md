@@ -61,7 +61,9 @@ list-visible API models are cached. The raw 443 KB catalog is never stored, and
 a failed refresh keeps the last-good cache.
 
 The current local Codex 0.155.1 result contains five models: Astra, Sol, Terra,
-Luna, and 5.5. Luna is the default and fallback model.
+Luna, and 5.5. Luna is the default and fallback model. The selector labels each
+model's estimated ChatGPT token credit rate relative to Luna and links to the
+current OpenAI pricing page; actual use still depends on the task and context.
 
 ## Usage
 

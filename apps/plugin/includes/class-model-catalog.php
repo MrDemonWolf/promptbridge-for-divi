@@ -108,6 +108,20 @@ final class Model_Catalog {
 		return $models;
 	}
 
+	/**
+	 * Return the current ChatGPT token credit rate relative to Luna.
+	 */
+	public static function credit_rate_vs_luna( string $slug ): ?string {
+		return match ( $slug ) {
+			'gpt-5.6-luna'  => '1',
+			'gpt-5.6-terra' => '10',
+			'gpt-5.6-sol'   => '17–20',
+			'gpt-5.5'       => '25',
+			'gpt-6-astra'   => '42–50',
+			default         => null,
+		};
+	}
+
 	private static function valid_slug( string $slug ): bool {
 		return strlen( $slug ) <= self::MAX_SLUG_BYTES && 1 === preg_match( '/\A[a-z0-9][a-z0-9._-]*\z/', $slug );
 	}

@@ -70,4 +70,13 @@ final class ModelCatalogTest extends TestCase {
 		self::assertFalse( $result['ok'] );
 		self::assertSame( 'missing_fallback', $result['code'] );
 	}
+
+	public function test_credit_rates_are_relative_to_luna(): void {
+		self::assertSame( '1', Model_Catalog::credit_rate_vs_luna( 'gpt-5.6-luna' ) );
+		self::assertSame( '10', Model_Catalog::credit_rate_vs_luna( 'gpt-5.6-terra' ) );
+		self::assertSame( '17–20', Model_Catalog::credit_rate_vs_luna( 'gpt-5.6-sol' ) );
+		self::assertSame( '25', Model_Catalog::credit_rate_vs_luna( 'gpt-5.5' ) );
+		self::assertSame( '42–50', Model_Catalog::credit_rate_vs_luna( 'gpt-6-astra' ) );
+		self::assertNull( Model_Catalog::credit_rate_vs_luna( 'future-model' ) );
+	}
 }
