@@ -46,6 +46,8 @@ final class Plugin {
 	 * Register runtime hooks.
 	 */
 	public function register(): void {
+		( new GitHub_Updater() )->register();
+
 		if ( is_admin() ) {
 			( new Admin_Page( new Diagnostics() ) )->register();
 		}

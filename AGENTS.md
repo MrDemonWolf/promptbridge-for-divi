@@ -60,5 +60,5 @@ cPanel, image, or WordPress.org behavior.
 ## Documentation honesty
 
 Keep implemented behavior, proposed design, hypotheses, and external policy
-questions visibly separate. Update `docs/PROGRESS.md` and `docs/AGENT-STATUS.md`
-when milestones or blockers change.
+questions visibly separate. Update the public plugin documentation and changelog
+when behavior changes; do not commit agent notes, scan dumps, or progress logs.

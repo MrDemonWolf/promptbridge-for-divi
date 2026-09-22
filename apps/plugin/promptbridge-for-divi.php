@@ -10,6 +10,7 @@
  * Author URI:        https://www.mrdemonwolf.com
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Update URI:        https://github.com/MrDemonWolf/promptbridge-for-divi
  * Text Domain:       promptbridge-for-divi
  *
  * @package MrDemonWolf\PromptBridge
@@ -32,6 +33,7 @@ require_once MDW_PBD_DIR . 'includes/class-runtime-path.php';
 require_once MDW_PBD_DIR . 'includes/class-runtime-home.php';
 require_once MDW_PBD_DIR . 'includes/class-runtime-probe.php';
 require_once MDW_PBD_DIR . 'includes/class-model-catalog.php';
+require_once MDW_PBD_DIR . 'includes/class-github-updater.php';
 require_once MDW_PBD_DIR . 'includes/class-diagnostics.php';
 require_once MDW_PBD_DIR . 'includes/class-admin-page.php';
 require_once MDW_PBD_DIR . 'includes/class-plugin.php';

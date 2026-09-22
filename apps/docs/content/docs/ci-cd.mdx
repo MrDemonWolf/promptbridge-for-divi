@@ -25,15 +25,12 @@ and awaits an approved push before the first deployment.
 
 Tags matching `v*` run the full plugin checks, verify that the tag matches the
 plugin header, build the ZIP, and publish it to a GitHub Release. Publishing a
-release does not create a GitHub replacement updater inside WordPress.
+release makes it available to WordPress through the plugin's native `Update
+URI` provider. WordPress caches the small public release projection for 12
+hours; site owners remain in control of automatic updates.
 
 Create a protected `release` environment with required reviewers before pushing
 a release tag.
-
-WordPress.org remains the intended production update channel. Its deployment
-workflow must stay disabled until the slug is approved. Create a protected
-`wordpress-org-production` environment with required reviewers and
-`WPORG_USERNAME` / `WPORG_PASSWORD` secrets before enabling publication.
 
 ## Dependency updates
 

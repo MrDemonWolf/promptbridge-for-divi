@@ -22,12 +22,20 @@ adding a separate theme script or dependency.
 
 This release does not authenticate with Codex, generate content, alter Divi
 controls, or install/update Codex. Those milestones remain gated on exact
-Codex and Divi versions, live tests, host support, and WordPress.org review.
+Codex and Divi versions, live tests, and host support.
 
 Divi is a registered trademark of Elegant Themes, Inc. PromptBridge for Divi
 is not affiliated with or endorsed by Elegant Themes or OpenAI.
 
 = External service disclosure =
+
+WordPress update checks may contact the public GitHub Releases API to retrieve
+the latest version number and download URL. GitHub receives the server IP
+address and normal HTTP request metadata.
+
+GitHub privacy policy: https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement
+
+GitHub terms: https://docs.github.com/en/site-policy/github-terms/github-terms-of-service
 
 Future generation requests would use an independently installed official Codex
 runtime. When an administrator has opted in and explicitly requests a
@@ -80,10 +88,10 @@ not enabled in this release.
 No. The cache refreshes only when an administrator with consent clicks **Run
 diagnostics**. There is no background cron launch.
 
-= Is WordPress.org approval guaranteed? =
+= How are plugin updates delivered? =
 
-No. Automated checks and this conservative design do not replace review by the
-WordPress Plugin Review Team.
+Tagged GitHub Releases are exposed through WordPress's native update system.
+Automatic installation remains under the site owner's WordPress settings.
 
 == Changelog ==
 
@@ -93,3 +101,4 @@ WordPress Plugin Review Team.
 * Add bounded shell-free Codex version probing behind explicit administrator action.
 * Add consent-gated, bounded model-catalog discovery with last-good cache preservation.
 * Add native Dark Mode for WP Dashboard palette support.
+* Add cached GitHub Release discovery through WordPress's native Update URI hook.

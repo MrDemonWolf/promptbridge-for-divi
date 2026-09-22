@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="apps/docs/app/icon.svg" alt="PromptBridge wolf and bridge icon" width="128">
+</p>
+
 # PromptBridge for Divi - Cautious Codex Integration for Divi 5
 
 PromptBridge for Divi is an independent WordPress plugin exploring a secure
@@ -30,16 +34,18 @@ Prove the boundary before trusting it.
   capabilities while preserving content, media, Codex, and external credentials.
 - **GitHub automation** - Checks plugin and docs changes, builds ZIP artifacts,
   deploys documentation, opens dependency updates, and publishes tagged
-  releases.
+  releases that WordPress can discover through its native update system.
 
 This staging alpha does not authenticate, generate content, alter Divi controls,
-or claim WordPress.org approval. See [current limitations](docs/PROGRESS.md).
+or claim WordPress.org approval. See the
+[current limitations](apps/docs/content/docs/limitations.mdx).
 
 ## Getting Started
 
 Read the
 [published documentation](https://mrdemonwolf.github.io/promptbridge-for-divi/).
-Engineering and policy evidence lives in [docs](docs/).
+Plugin architecture, compatibility, privacy, hosting, and testing guidance lives
+in [docs](docs/).
 
 1. Download a ZIP produced by CI or a tagged GitHub Release.
 2. Upload and activate it in WordPress.

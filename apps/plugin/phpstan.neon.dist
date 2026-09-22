@@ -8,6 +8,7 @@ parameters:
 		- tests
 	scanFiles:
 		- includes/class-plugin.php
+		- includes/class-github-updater.php
 	excludePaths:
 		analyse:
 			- tests/bootstrap.php
