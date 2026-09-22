@@ -1,0 +1,148 @@
+name: Deploy to WordPress.org
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Plugin version to deploy (for example, 0.1.0)'
+        required: true
+        type: string
+      dry_run:
+        description: 'Prepare and inspect the SVN changes without committing'
+        required: true
+        type: boolean
+        default: true
+      confirmation:
+        description: 'Type DEPLOY to confirm'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+concurrency:
+  group: wordpress-org-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Prepare WordPress.org release
+    runs-on: ubuntu-latest
+    environment:
+      name: wordpress-org-production
+      url: https://wordpress.org/plugins/promptbridge-for-divi/
+    env:
+      RELEASE_VERSION: ${{ inputs.version }}
+      CONFIRMATION: ${{ inputs.confirmation }}
+      SVN_URL: https://plugins.svn.wordpress.org/promptbridge-for-divi
+    steps:
+      - name: Confirm protected deployment
+        run: |
+          set -euo pipefail
+          if [[ "$CONFIRMATION" != "DEPLOY" ]]; then
+            echo "::error::Confirmation must be exactly DEPLOY."
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: composer:v2
+
+      - name: Verify version metadata
+        run: |
+          set -euo pipefail
+          if ! grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$' <<< "$RELEASE_VERSION"; then
+            echo "::error::Invalid release version: ${RELEASE_VERSION}"
+            exit 1
+          fi
+          if [[ "$GITHUB_REF" != "refs/tags/v${RELEASE_VERSION}" ]]; then
+            echo "::error::Run this workflow from tag v${RELEASE_VERSION}, not ${GITHUB_REF}."
+            exit 1
+          fi
+          plugin_version="$(grep -m1 -E '^\s*\*\s*Version:' apps/plugin/promptbridge-for-divi.php | sed -E 's/.*Version:[[:space:]]*//' | tr -d '[:space:]')"
+          stable_tag="$(sed -n -E 's/^Stable tag:[[:space:]]*//p' apps/plugin/readme.txt | head -1 | tr -d '[:space:]')"
+          if [[ "$RELEASE_VERSION" == "$plugin_version" && "$RELEASE_VERSION" == "$stable_tag" ]]; then
+            exit 0
+          else
+            echo "::error::Requested version ${RELEASE_VERSION}, plugin version ${plugin_version}, and Stable tag ${stable_tag} must match."
+            exit 1
+          fi
+
+      - name: Validate and test plugin
+        working-directory: apps/plugin
+        run: |
+          composer validate --strict
+          composer install --no-interaction --no-progress
+          composer audit --no-interaction
+          composer check
+
+      - name: Build plugin zip
+        id: build
+        run: apps/plugin/bin/build-zip.sh
+
+      - name: Prepare SVN changes
+        run: |
+          set -euo pipefail
+          svn_dir="$(mktemp -d)"
+          package_dir="$(mktemp -d)"
+          echo "SVN_DIR=${svn_dir}" >> "$GITHUB_ENV"
+
+          svn checkout --depth immediates "$SVN_URL" "$svn_dir" \
+            --non-interactive \
+            --no-auth-cache
+          svn update "$svn_dir/trunk" --set-depth infinity \
+            --non-interactive \
+            --no-auth-cache
+          svn update "$svn_dir/tags" --set-depth immediates \
+            --non-interactive \
+            --no-auth-cache
+
+          if [[ -e "$svn_dir/tags/$RELEASE_VERSION" ]]; then
+            echo "::error::WordPress.org tag ${RELEASE_VERSION} already exists."
+            exit 1
+          fi
+
+          unzip -q "apps/plugin/${{ steps.build.outputs.zip }}" -d "$package_dir"
+          rsync -a --delete "$package_dir/promptbridge-for-divi/" "$svn_dir/trunk/"
+          svn add --force "$svn_dir/trunk"
+          while IFS= read -r status_line; do
+            [[ "$status_line" == !* ]] && svn delete --force "${status_line:8}"
+          done < <(svn status "$svn_dir/trunk")
+          svn copy "$svn_dir/trunk" "$svn_dir/tags/$RELEASE_VERSION"
+          svn status "$svn_dir"
+
+      - name: Upload inspected zip
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: promptbridge-for-divi-wordpress-org-${{ inputs.version }}
+          path: apps/plugin/${{ steps.build.outputs.zip }}
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Commit to WordPress.org
+        if: inputs.dry_run == false
+        env:
+          WPORG_USERNAME: ${{ secrets.WPORG_USERNAME }}
+          WPORG_PASSWORD: ${{ secrets.WPORG_PASSWORD }}
+        run: |
+          if [[ -z "$WPORG_USERNAME" || -z "$WPORG_PASSWORD" ]]; then
+            echo "::error::The wordpress-org-production environment must provide WPORG_USERNAME and WPORG_PASSWORD."
+            exit 1
+          fi
+          svn commit "$SVN_DIR" \
+            --message "Release ${RELEASE_VERSION}" \
+            --username "$WPORG_USERNAME" \
+            --password "$WPORG_PASSWORD" \
+            --non-interactive \
+            --no-auth-cache

@@ -1,0 +1,6 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="promptbridge-title">
+	<title id="promptbridge-title">PromptBridge</title>
+	<path fill="#091533" fill-rule="evenodd" d="M6 17C6 10.925 10.925 6 17 6h8c8.837 0 16 7.163 16 16v20c0 8.837-7.163 16-16 16h-8C10.925 58 6 53.075 6 47V17Zm12-1a4 4 0 0 0-4 4v24a4 4 0 0 0 4 4h7a6 6 0 0 0 6-6V22a6 6 0 0 0-6-6h-7Z" />
+	<path fill="#0FACED" fill-rule="evenodd" d="M29 6h15c7.732 0 14 6.268 14 14 0 4.828-2.444 9.087-6.164 11.602C55.587 34.09 58 38.348 58 43.133 58 51.343 51.343 58 43.133 58H29V6Zm10 10v11h5a5.5 5.5 0 1 0 0-11h-5Zm0 21v11h4.133a5.5 5.5 0 0 0 0-11H39Z" />
+	<rect x="21" y="27" width="25" height="10" rx="5" fill="#0FACED" />
+</svg>

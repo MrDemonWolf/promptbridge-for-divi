@@ -1,0 +1,130 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  plugin:
+    name: Plugin (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.3', '8.4', '8.5']
+    defaults:
+      run:
+        working-directory: apps/plugin
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: composer:v2
+
+      - name: Validate composer.json
+        run: composer validate --strict
+
+      - name: Cache Composer packages
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/composer/files
+          key:
+            composer-${{ runner.os }}-php${{ matrix.php }}-${{
+            hashFiles('apps/plugin/composer.lock') }}
+          restore-keys: |
+            composer-${{ runner.os }}-php${{ matrix.php }}-
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress
+
+      - name: Audit dependencies
+        run: composer audit --no-interaction
+
+      - name: Coding standards
+        run: composer lint
+
+      - name: Static analysis
+        run: composer analyse
+
+      - name: Tests
+        run: composer test
+
+  docs:
+    name: Docs & tooling
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: package.json
+
+      - name: Cache Bun packages
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: |
+            bun-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Type-check
+        run: bun run --filter @mrdemonwolf/promptbridge-docs typecheck
+
+      - name: Lint
+        run: bun run --filter @mrdemonwolf/promptbridge-docs lint
+
+      - name: Format check
+        run: bun run format:check
+
+      - name: Build docs
+        run: bun run docs:build
+        env:
+          NODE_ENV: production
+
+  package:
+    name: Package plugin
+    needs: [plugin, docs]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Build plugin zip
+        id: build
+        run: apps/plugin/bin/build-zip.sh
+
+      - name: Upload plugin zip
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: promptbridge-for-divi
+          path: apps/plugin/${{ steps.build.outputs.zip }}
+          if-no-files-found: error
+          retention-days: 14

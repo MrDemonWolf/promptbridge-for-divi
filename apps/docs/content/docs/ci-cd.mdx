@@ -1,0 +1,41 @@
+---
+title: CI/CD
+description: GitHub-owned checks, docs deployment, packages, and releases.
+---
+
+## Pull requests and main
+
+GitHub Actions runs:
+
+- Composer validation and dependency audit;
+- PHP coding standards and static analysis;
+- PHPUnit checks across supported PHP versions;
+- docs type-checking, formatting, and static export; and
+- a reproducible staging-alpha ZIP build.
+
+## Documentation
+
+Changes on `main` build the Fumadocs app and deploy `apps/docs/out` to GitHub
+Pages. The public repository is configured with `build_type=workflow`; the site
+is
+[mrdemonwolf.github.io/promptbridge-for-divi](https://mrdemonwolf.github.io/promptbridge-for-divi/)
+and awaits an approved push before the first deployment.
+
+## Releases
+
+Tags matching `v*` run the full plugin checks, verify that the tag matches the
+plugin header, build the ZIP, and publish it to a GitHub Release. Publishing a
+release does not create a GitHub replacement updater inside WordPress.
+
+Create a protected `release` environment with required reviewers before pushing
+a release tag.
+
+WordPress.org remains the intended production update channel. Its deployment
+workflow must stay disabled until the slug is approved. Create a protected
+`wordpress-org-production` environment with required reviewers and
+`WPORG_USERNAME` / `WPORG_PASSWORD` secrets before enabling publication.
+
+## Dependency updates
+
+Dependabot opens GitHub pull requests for Composer packages, Bun dependencies,
+and GitHub Actions. CI must pass before merging.

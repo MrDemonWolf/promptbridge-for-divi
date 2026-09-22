@@ -1,0 +1,47 @@
+---
+title: Setup
+description: Install the staging alpha and run local diagnostics.
+---
+
+## Requirements
+
+- WordPress 6.7 or newer
+- PHP 8.3 or newer
+- A server where `proc_open` is permitted
+- Divi 5 for future editor integration
+- An official Codex installation managed by the server owner
+
+## Install
+
+1. Download the CI or release ZIP.
+2. Upload it through **Plugins > Add New > Upload Plugin**.
+3. Activate **PromptBridge for Divi**.
+4. Add server-owned configuration to `wp-config.php`:
+
+```php
+define( 'MDW_PBD_CODEX_PATH', '/absolute/path/to/codex' );
+define( 'MDW_PBD_CODEX_HOME', '/private/path/to/promptbridge-codex-home' );
+```
+
+5. Open **Settings > PromptBridge**.
+6. Review the OpenAI service disclosure and choose whether to opt in.
+7. Select **Run diagnostics**.
+
+After consent, **Run diagnostics** executes the fixed local commands for the
+version probe and `codex debug models --bundled`. The model response is capped
+at 2 MB and strictly projected so only list-visible API models are cached in the
+non-autoloaded `mdw_pbd_model_catalog` option. The raw 443 KB catalog is not
+stored, and a failed refresh preserves the last-good cache. Refresh occurs only
+when this action is clicked; there is no background cron launch. In the current
+Codex 0.155.1 staging result, the five models are Astra, Sol, Terra, Luna, and
+5.5, with Luna as the default and fallback.
+
+The Codex home must be dedicated to this plugin, writable by the PHP worker,
+outside the public WordPress directory, and set to directory mode `0700`. Add an
+empty `.promptbridge-for-divi` marker file to confirm the path is reserved. Do
+not reuse a development account's global Codex home.
+
+## No runtime installer
+
+PromptBridge never downloads, installs, updates, replaces, or removes Codex. The
+host owner manages Codex independently.

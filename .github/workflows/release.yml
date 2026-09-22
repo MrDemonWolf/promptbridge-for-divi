@@ -1,0 +1,121 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Build the zip but do not publish a GitHub release'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  test:
+    name: Test before release
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/plugin
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: composer:v2
+
+      - name: Validate composer.json
+        run: composer validate --strict
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress
+
+      - name: Audit dependencies
+        run: composer audit --no-interaction
+
+      - name: Run plugin checks
+        run: composer check
+
+  package:
+    name: Build release zip
+    needs: test
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.build.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Verify tag matches plugin version
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          tag_version="${RELEASE_TAG#v}"
+          plugin_version="$(grep -m1 -E '^\s*\*\s*Version:' apps/plugin/promptbridge-for-divi.php | sed -E 's/.*Version:[[:space:]]*//' | tr -d '[:space:]')"
+          if [[ "$tag_version" != "$plugin_version" ]]; then
+            echo "::error::Tag v${tag_version} does not match plugin version ${plugin_version}."
+            exit 1
+          fi
+
+      - name: Build plugin zip
+        id: build
+        run: apps/plugin/bin/build-zip.sh
+
+      - name: Upload release artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: promptbridge-for-divi-release
+          path: apps/plugin/${{ steps.build.outputs.zip }}
+          if-no-files-found: error
+          retention-days: 14
+
+  publish:
+    name: Publish GitHub release
+    if:
+      startsWith(github.ref, 'refs/tags/v') && (github.event_name == 'push' ||
+      inputs.dry_run == false)
+    needs: package
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      actions: read
+      contents: write
+    steps:
+      - name: Download release artifact
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run:
+          gh run download "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY" --name
+          promptbridge-for-divi-release --dir release-artifact
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$RELEASE_TAG" \
+            "release-artifact/promptbridge-for-divi-${{ needs.package.outputs.version }}.zip" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "$RELEASE_TAG" \
+            --generate-notes \
+            --verify-tag
