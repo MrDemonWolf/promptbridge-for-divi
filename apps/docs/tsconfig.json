@@ -1,0 +1,38 @@
+{
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"composite": false,
+		"declaration": false,
+		"declarationMap": false,
+		"exactOptionalPropertyTypes": false,
+		"incremental": true,
+		"jsx": "preserve",
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"noEmit": true,
+		"paths": {
+			"@/*": ["./*"],
+			"@/.source": ["./.source"]
+		},
+		"plugins": [
+			{
+				"name": "next"
+			}
+		]
+	},
+	"include": [
+		"**/*.mjs",
+		"app/**/*.ts",
+		"app/**/*.tsx",
+		"lib/**/*.ts",
+		"lib/**/*.tsx",
+		".source/**/*.ts",
+		"mdx-components.tsx",
+		"next-env.d.ts",
+		"global.d.ts",
+		"source.config.ts",
+		".next/types/**/*.ts"
+	],
+	"exclude": ["node_modules", ".next", "out"]
+}

@@ -1,0 +1,43 @@
+---
+title: Security and privacy
+description: Trust boundaries, consent, and controls in the staging alpha.
+---
+
+## Current controls
+
+- A dedicated `mdw_pbd_manage` capability protects the settings page.
+- Nonces protect settings and diagnostic writes.
+- Runtime paths are absolute, canonicalized, and configured outside browser
+  input.
+- The version probe passes a fixed argv array to `proc_open`; no shell command
+  is built.
+- The consent-gated model probe uses fixed `debug models --bundled` arguments;
+  it runs only from **Run diagnostics**, not from a background cron launch.
+- Process duration and visible output are bounded.
+- Model responses are capped at 2 MB and pass strict projection validation.
+- Only list-visible API models are cached in the non-autoloaded
+  `mdw_pbd_model_catalog` option; the raw 443 KB catalog is never stored, and a
+  failed refresh preserves the last-good cache.
+- The dedicated Codex home must live outside the public WordPress tree.
+- All diagnostic output is escaped.
+- Activation performs no network request and installs no dependency.
+
+## External service disclosure
+
+Future requested generation may send a prompt, selected Divi content, account
+data, and runtime metadata to OpenAI through Codex. Administrators must opt in
+before PromptBridge launches Codex. See the
+[OpenAI privacy policy](https://openai.com/policies/privacy-policy/) and
+[terms of use](https://openai.com/policies/terms-of-use/).
+
+## Generated code
+
+PromptBridge will not execute generated PHP or JavaScript. Code insertion stays
+disabled while its protocol, authorization, and sanitization controls remain
+unproven.
+
+## Uninstall
+
+Uninstall removes plugin options, schedules, and capabilities. It preserves
+published pages, media, the independently installed Codex executable, and any
+credentials not owned by this plugin.
