@@ -43,9 +43,9 @@ or claim WordPress.org approval. See the
 ## Getting Started
 
 Read the
-[published documentation](https://promptbridge-for-divi.mrdemonwolf.dev/).
-Plugin architecture, compatibility, privacy, hosting, and testing guidance lives
-in [docs](docs/).
+[documentation website](https://promptbridge-for-divi.mrdemonwolf.dev/). Plugin
+architecture, compatibility, privacy, hosting, and testing guidance lives in
+[docs](docs/).
 
 1. Download a ZIP produced by CI or a tagged GitHub Release.
 2. Upload and activate it in WordPress.
