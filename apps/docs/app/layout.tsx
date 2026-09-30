@@ -14,7 +14,7 @@ const description =
 	'Setup, architecture, security, and release documentation for PromptBridge for Divi.';
 
 export const metadata: Metadata = {
-	metadataBase: new URL('https://mrdemonwolf.github.io/promptbridge-for-divi/'),
+	metadataBase: new URL('https://promptbridge-for-divi.mrdemonwolf.dev/'),
 	title: {
 		default: 'PromptBridge for Divi',
 		template: '%s | PromptBridge for Divi',

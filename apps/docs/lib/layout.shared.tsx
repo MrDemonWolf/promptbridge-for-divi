@@ -1,8 +1,5 @@
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 
-const basePath =
-	process.env.NODE_ENV === 'production' ? '/promptbridge-for-divi' : '';
-
 export function baseOptions(): BaseLayoutProps {
 	return {
 		nav: {
@@ -10,7 +7,7 @@ export function baseOptions(): BaseLayoutProps {
 				<span className="docs-brand">
 					<img
 						className="brand-icon"
-						src={`${basePath}/icon.svg`}
+						src="/icon.svg"
 						alt=""
 						aria-hidden="true"
 					/>

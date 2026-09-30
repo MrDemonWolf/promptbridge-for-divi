@@ -7,9 +7,6 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
-const basePath =
-	process.env.NODE_ENV === 'production' ? '/promptbridge-for-divi' : '';
-
 const capabilities = [
 	{
 		label: 'Host',
@@ -41,7 +38,7 @@ export default function HomePage() {
 				>
 					<img
 						className="brand-icon"
-						src={`${basePath}/icon.svg`}
+						src="/icon.svg"
 						alt=""
 						aria-hidden="true"
 					/>
@@ -113,7 +110,7 @@ export default function HomePage() {
 					<div className="preview-body">
 						<div className="preview-card">
 							<img
-								src={`${basePath}/brands/wordpress.svg`}
+								src="/brands/wordpress.svg"
 								alt=""
 								aria-hidden="true"
 							/>
@@ -133,7 +130,7 @@ export default function HomePage() {
 						<div className="preview-card preview-card--codex">
 							<span className="codex-mark">
 								<img
-									src={`${basePath}/brands/codex.svg`}
+									src="/brands/codex.svg"
 									alt=""
 									aria-hidden="true"
 								/>
