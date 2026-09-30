@@ -109,11 +109,7 @@ export default function HomePage() {
 					</div>
 					<div className="preview-body">
 						<div className="preview-card">
-							<img
-								src="/brands/wordpress.svg"
-								alt=""
-								aria-hidden="true"
-							/>
+							<img src="/brands/wordpress.svg" alt="" aria-hidden="true" />
 							<span>
 								<small>WordPress</small>
 								<strong>Divi 5</strong>
@@ -129,11 +125,7 @@ export default function HomePage() {
 
 						<div className="preview-card preview-card--codex">
 							<span className="codex-mark">
-								<img
-									src="/brands/codex.svg"
-									alt=""
-									aria-hidden="true"
-								/>
+								<img src="/brands/codex.svg" alt="" aria-hidden="true" />
 							</span>
 							<span>
 								<small>Local runtime</small>
