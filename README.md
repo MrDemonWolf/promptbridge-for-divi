@@ -42,8 +42,7 @@ or claim WordPress.org approval. See the
 
 ## Getting Started
 
-Read the
-[documentation website](https://promptbridge-for-divi.mrdemonwolf.dev/). Plugin
+Read the [documentation website](https://promptbridge.mrdemonwolf.dev/). Plugin
 architecture, compatibility, privacy, hosting, and testing guidance lives in
 [docs](docs/).
 
