@@ -1,0 +1,12 @@
+node_modules/
+.turbo/
+*.tsbuildinfo
+/bun.lockb
+/apps/docs/.next/
+/apps/docs/.source/
+/apps/docs/out/
+/apps/plugin/build/
+/apps/plugin/.phpstan/
+/apps/plugin/vendor/
+/apps/plugin/.phpunit.cache/
+/.DS_Store

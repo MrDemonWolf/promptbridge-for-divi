@@ -1,0 +1,11 @@
+{
+	"name": "@mrdemonwolf/promptbridge-plugin",
+	"private": true,
+	"scripts": {
+		"build": "bin/build-zip.sh",
+		"lint": "composer lint",
+		"test": "composer test",
+		"typecheck": "composer analyse",
+		"clean": "rm -rf build vendor .phpunit.cache"
+	}
+}

@@ -1,0 +1,41 @@
+---
+title: Overview
+description: What PromptBridge does today, and what remains gated.
+---
+
+PromptBridge for Divi is an independent WordPress plugin exploring a safe bridge
+between Divi 5 and an independently installed official Codex runtime.
+
+## Current milestone
+
+The staging alpha provides:
+
+- safe activation when Divi or Codex is unavailable;
+- a dedicated administrator capability;
+- read-only PHP, WordPress, Divi, process, and runtime diagnostics;
+- fixed-argument, time-bounded local version probing;
+- a consent-gated model catalog refresh with a bounded, validated cache;
+- plain-language model usage estimates based on current ChatGPT token credit
+  rates;
+- explicit consent before any Codex child process can run; and
+- clean deactivation and uninstall behavior.
+
+The current staging evidence uses licensed/current Divi 5.13.1 and the real
+Codex CLI 0.155.1 at a server-owned path. The Divi browser UI placement and
+layout were checked. PromptBridge is exposed under a dedicated **Divi >
+PromptBridge** submenu when Divi's top-level menu is available, or under
+**Settings > PromptBridge** otherwise. Its General, Diagnostics, and Advanced
+tabs work, but the plugin still does not authenticate, generate content, or
+alter Divi controls.
+
+It does **not** authenticate, generate content, alter Divi controls, install
+Codex, or claim WordPress.org eligibility.
+
+## Why the boundary is strict
+
+`codex app-server` is documented but experimental. Exact protocol support must
+be generated from a pinned Codex release and tested live before PromptBridge can
+rely on it. Divi control mutation also needs a version-specific acceptance test
+even though the licensed staging editor is now available.
+
+Read [Limitations](/docs/limitations) before evaluating this build.

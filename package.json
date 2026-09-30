@@ -1,0 +1,32 @@
+{
+	"name": "promptbridge-for-divi",
+	"private": true,
+	"workspaces": [
+		"apps/docs",
+		"apps/plugin"
+	],
+	"scripts": {
+		"dev": "turbo dev",
+		"build": "turbo build",
+		"check": "turbo lint typecheck test build",
+		"format": "prettier --write .",
+		"format:check": "prettier --check .",
+		"lint": "turbo lint",
+		"typecheck": "turbo typecheck",
+		"test": "turbo test",
+		"clean": "turbo clean",
+		"docs:dev": "bun run --filter @mrdemonwolf/promptbridge-docs dev",
+		"docs:build": "bun run --filter @mrdemonwolf/promptbridge-docs build",
+		"plugin:check": "cd apps/plugin && composer check",
+		"plugin:zip": "apps/plugin/bin/build-zip.sh"
+	},
+	"devDependencies": {
+		"prettier": "^3.9.5",
+		"turbo": "^2.10.4",
+		"typescript": "^6.0.3"
+	},
+	"packageManager": "bun@1.4.2",
+	"engines": {
+		"node": ">=20"
+	}
+}

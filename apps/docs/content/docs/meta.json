@@ -1,0 +1,13 @@
+{
+	"title": "PromptBridge for Divi",
+	"pages": [
+		"index",
+		"---Get started---",
+		"setup",
+		"architecture",
+		"---Operations---",
+		"security",
+		"ci-cd",
+		"limitations"
+	]
+}

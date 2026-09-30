@@ -1,0 +1,46 @@
+---
+title: Architecture
+description: Planned boundaries and the narrow path implemented today.
+---
+
+## Implemented M1 path
+
+```text
+WordPress administrator
+  -> capability and nonce checks
+  -> local diagnostics
+  -> fixed argv version process
+  -> fixed `debug models --bundled` process
+  -> projected model catalog cache
+  -> escaped status output
+```
+
+The executable and dedicated Codex home come from server-owned constants in
+`wp-config.php`. Browser requests cannot choose an executable or add arguments.
+The model catalog refresh is explicit and consent-gated: **Run diagnostics** is
+the only trigger, with no background cron launch. It stores only the validated
+list-visible model projection in non-autoloaded `mdw_pbd_model_catalog`, keeps
+the last-good cache, and never stores the raw catalog.
+
+## Proposed generation path
+
+```text
+Supported Divi field control
+  -> authenticated WordPress request
+  -> owned asynchronous job
+  -> pinned Codex app-server over local stdio
+  -> validated structured result
+  -> preview
+  -> explicit apply to Divi editor state
+```
+
+This second path is design work, not a feature claim. It remains disabled until
+the exact Codex and Divi versions pass live acceptance tests.
+
+## Protocol gate
+
+The official
+[Codex app-server documentation](https://developers.openai.com/codex/app-server/)
+describes newline-delimited messages over stdio. The CLI reference still labels
+the command experimental, so PromptBridge must pin a version and generate its
+matching JSON Schema before implementing the PHP client.

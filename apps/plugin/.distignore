@@ -1,0 +1,14 @@
+/.distignore
+/.phpstan
+/.phpunit.cache
+/.turbo
+/bin
+/build
+/composer.json
+/composer.lock
+/package.json
+/phpcs.xml.dist
+/phpstan.neon.dist
+/phpunit.xml.dist
+/tests
+/vendor

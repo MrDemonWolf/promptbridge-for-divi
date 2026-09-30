@@ -1,0 +1,15 @@
+parameters:
+	level: 8
+	paths:
+		- includes/class-runtime-home.php
+		- includes/class-runtime-path.php
+		- includes/class-runtime-probe.php
+		- includes/class-model-catalog.php
+		- tests
+	scanFiles:
+		- includes/class-plugin.php
+		- includes/class-github-updater.php
+	excludePaths:
+		analyse:
+			- tests/bootstrap.php
+	tmpDir: .phpstan
