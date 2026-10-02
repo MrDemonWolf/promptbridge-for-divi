@@ -271,31 +271,41 @@ export default function HomePage() {
 			</main>
 
 			<footer className="marketing-footer">
-				<div className="footer-main">
-					<a
-						className="marketing-brand"
-						href="#top"
-						aria-label="PromptBridge home"
-					>
-						<img src="/icon.svg" alt="" aria-hidden="true" />
-						<span>PromptBridge</span>
-					</a>
-					<p>
-						© 2026 PromptBridge by{' '}
-						<a href="https://www.mrdemonwolf.com">MrDemonWolf, Inc.</a>
-					</p>
-					<nav aria-label="Footer navigation">
-						<Link href="/docs">Docs</Link>
-						<Link href="/docs/security">Security</Link>
-						<a href="https://github.com/MrDemonWolf/promptbridge-for-divi">
-							GitHub
-						</a>
-					</nav>
+				<div className="marketing-footer-inner">
+					<div className="footer-main">
+						<div className="footer-brand-group">
+							<a
+								className="marketing-brand footer-brand"
+								href="#top"
+								aria-label="PromptBridge home"
+							>
+								<img src="/icon.svg" alt="" aria-hidden="true" />
+								<span>PromptBridge</span>
+							</a>
+							<p className="footer-tagline">
+								Drafts stay drafts until you choose to apply them.
+							</p>
+						</div>
+						<nav aria-label="Footer navigation">
+							<Link href="/docs">Docs</Link>
+							<Link href="/docs/security">Security</Link>
+							<a href="https://github.com/MrDemonWolf/promptbridge-for-divi">
+								GitHub
+							</a>
+						</nav>
+					</div>
+					<div className="footer-bottom">
+						<p className="footer-copyright">
+							© 2026 PromptBridge by{' '}
+							<a href="https://www.mrdemonwolf.com">MrDemonWolf, Inc.</a>
+						</p>
+						<p className="trademark-note">
+							Divi is a registered trademark of Elegant Themes, Inc.
+							PromptBridge is not affiliated with nor endorsed by Elegant
+							Themes.
+						</p>
+					</div>
 				</div>
-				<p className="trademark-note">
-					Divi is a registered trademark of Elegant Themes, Inc. PromptBridge is
-					not affiliated with nor endorsed by Elegant Themes.
-				</p>
 			</footer>
 		</div>
 	);

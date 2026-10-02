@@ -10,11 +10,16 @@
 	--amber: #ffbd63;
 	background:
 		radial-gradient(
-			ellipse at 79% 16%,
-			rgb(15 172 237 / 10%),
-			transparent 24rem
+			ellipse 44rem 35rem at 80% 14%,
+			rgb(15 172 237 / 13%),
+			transparent 71%
 		),
-		var(--paper);
+		radial-gradient(
+			ellipse 38rem 32rem at 10% 45%,
+			rgb(233 180 94 / 11%),
+			transparent 72%
+		),
+		linear-gradient(180deg, #faf8f1 0%, var(--paper) 47rem, #f0ede5 100%);
 	color: var(--ink);
 	font-family: var(--font-instrument-sans), sans-serif;
 	min-height: 100vh;
@@ -28,12 +33,12 @@
 
 .marketing-grid {
 	background-image:
-		linear-gradient(rgb(9 21 51 / 3.5%) 1px, transparent 1px),
-		linear-gradient(90deg, rgb(9 21 51 / 3.5%) 1px, transparent 1px);
-	background-size: 2.75rem 2.75rem;
+		linear-gradient(rgb(9 21 51 / 3%) 1px, transparent 1px),
+		linear-gradient(90deg, rgb(9 21 51 / 3%) 1px, transparent 1px);
+	background-size: 3rem 3rem;
 	inset: 0 0 auto;
-	height: 51rem;
-	mask-image: linear-gradient(#000 0%, transparent 88%);
+	height: 56rem;
+	mask-image: linear-gradient(#000 0%, rgb(0 0 0 / 88%) 48%, transparent 100%);
 	pointer-events: none;
 	position: absolute;
 }
@@ -42,8 +47,7 @@
 .marketing-hero,
 .workflow-section,
 .alpha-section,
-.marketing-cta,
-.marketing-footer {
+.marketing-cta {
 	margin-inline: auto;
 	max-width: 76rem;
 	position: relative;
@@ -739,25 +743,79 @@
 }
 
 .marketing-footer {
-	border-top: 1px solid rgb(9 21 51 / 16%);
-	padding: 1.4rem 2.5rem 2.5rem;
+	background:
+		radial-gradient(
+			ellipse 34rem 18rem at 82% 0%,
+			rgb(15 172 237 / 12%),
+			transparent 75%
+		),
+		var(--ink);
+	color: var(--paper-light);
+	position: relative;
+}
+
+.marketing-footer::before {
+	background: linear-gradient(
+		90deg,
+		transparent,
+		rgb(15 172 237 / 44%),
+		transparent
+	);
+	content: '';
+	height: 1px;
+	left: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+.marketing-footer-inner {
+	margin-inline: auto;
+	max-width: 76rem;
+	padding: 2.7rem 2.5rem 1.45rem;
 }
 
 .footer-main {
-	align-items: center;
+	align-items: flex-start;
+	border-bottom: 1px solid rgb(228 236 248 / 16%);
 	display: flex;
-	gap: 1.3rem;
+	gap: 2rem;
 	justify-content: space-between;
+	padding-bottom: 1.8rem;
 }
 
-.footer-main > p {
-	color: var(--muted);
-	font-size: 0.82rem;
+.footer-brand-group {
+	display: grid;
+	gap: 0.75rem;
+}
+
+.footer-brand {
+	color: var(--paper-light);
+	width: fit-content;
+}
+
+.footer-brand img {
+	background: #142b53;
+	border-color: rgb(255 253 248 / 18%);
+}
+
+.footer-tagline {
+	color: #c7d4e8;
+	font-size: 0.95rem;
+	line-height: 1.5;
+	margin: 0;
+	max-width: 25rem;
+}
+
+.footer-copyright {
+	color: #c7d4e8;
+	font-size: 0.8rem;
+	line-height: 1.55;
 	margin: 0;
 }
 
-.footer-main > p a {
-	color: var(--ink);
+.footer-copyright a {
+	color: var(--paper-light);
 	font-weight: 650;
 	text-underline-offset: 0.16em;
 }
@@ -765,28 +823,49 @@
 .footer-main nav {
 	align-items: center;
 	display: flex;
-	gap: 1.15rem;
+	flex-wrap: wrap;
+	gap: 0.35rem;
 }
 
 .footer-main nav a {
-	color: var(--muted);
-	font-size: 0.82rem;
+	border-radius: 0.4rem;
+	color: #c7d4e8;
+	font-size: 0.9rem;
 	font-weight: 650;
+	align-items: center;
+	display: inline-flex;
 	min-height: 2.75rem;
-	padding-block: 0.8rem;
+	padding-inline: 0.75rem;
 	text-decoration: none;
+	transition:
+		background-color 160ms ease,
+		color 160ms ease;
 }
 
 .footer-main nav a:hover {
-	color: var(--blue);
+	background: rgb(255 253 248 / 8%);
+	color: var(--paper-light);
+}
+
+.footer-bottom {
+	align-items: flex-start;
+	display: flex;
+	gap: 1.4rem;
+	justify-content: space-between;
+	padding-top: 1.15rem;
 }
 
 .marketing-footer .trademark-note {
-	color: #556078;
-	font-size: 0.72rem;
+	color: #b8c7dc;
+	font-size: 0.76rem;
 	line-height: 1.5;
-	margin: 1.1rem 0 0;
-	max-width: 48rem;
+	margin: 0;
+	max-width: 38rem;
+	text-align: right;
+}
+
+.marketing-footer :focus-visible {
+	outline-color: var(--cyan);
 }
 
 .marketing-shell :focus-visible {
@@ -881,8 +960,13 @@
 		align-items: flex-start;
 	}
 
-	.marketing-footer {
+	.marketing-footer-inner {
 		padding-inline: 1.35rem;
+	}
+
+	.footer-main {
+		flex-direction: column;
+		gap: 1rem;
 	}
 }
 
@@ -977,13 +1061,17 @@
 		gap: 0.65rem;
 	}
 
-	.footer-main {
-		align-items: flex-start;
+	.footer-bottom {
 		flex-direction: column;
+		gap: 0.55rem;
 	}
 
 	.footer-main nav {
-		gap: 0.75rem;
+		margin-inline: -0.75rem;
+	}
+
+	.marketing-footer .trademark-note {
+		text-align: left;
 	}
 }
 
