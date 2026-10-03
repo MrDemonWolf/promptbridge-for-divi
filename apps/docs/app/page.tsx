@@ -289,6 +289,8 @@ export default function HomePage() {
 						<nav aria-label="Footer navigation">
 							<Link href="/docs">Docs</Link>
 							<Link href="/docs/security">Security</Link>
+							<Link href="/docs/terms">Terms</Link>
+							<Link href="/docs/privacy">Privacy</Link>
 							<a href="https://github.com/MrDemonWolf/promptbridge-for-divi">
 								GitHub
 							</a>

@@ -1,0 +1,80 @@
+---
+title: Privacy Policy
+description: What PromptBridge stores and shares when used on a WordPress site.
+---
+
+**Effective date: October 2, 2026**
+
+This policy describes PromptBridge for Divi, a WordPress plugin published by
+MrDemonWolf, Inc. It covers the plugin's own handling of information. The
+WordPress site owner and the services configured by that owner have separate
+privacy practices.
+
+## Information PromptBridge handles
+
+- **Settings and policy acceptance.** The site's WordPress database stores the
+  selected model, the administrator's service-access choice, and acceptance of
+  the current Terms of Use and acknowledgment of this policy. The acceptance
+  record contains the policy versions, timestamp, and WordPress user ID.
+- **Generation jobs.** When an authorized editor requests generation after the
+  administrator has opted in, the plugin temporarily stores the instruction,
+  selected Divi Text field content, target post and module identifiers, selected
+  model, and job status in a private WordPress record. It sends the instruction
+  and selected field content to OpenAI through the separately installed Codex
+  runtime. PromptBridge removes the instruction and field content from its job
+  record when the job succeeds or fails. The sanitized preview and job metadata
+  remain until cleanup removes the private job.
+- **Diagnostics.** When an administrator explicitly runs diagnostics, the plugin
+  may execute fixed, local Codex commands to check the runtime and refresh the
+  model catalog. The validated model list is stored in a non-autoloaded
+  WordPress option. Activation and ordinary page loads do not launch Codex.
+- **Update checks.** WordPress may request public release metadata from GitHub.
+  GitHub receives the server's IP address and ordinary HTTP request metadata.
+  PromptBridge caches the release version, page URL, and package URL for 12
+  hours.
+
+PromptBridge does not add analytics, telemetry, tracking pixels, or third-party
+browser scripts. The plugin does not make an external request during activation.
+
+## Storage and retention
+
+Settings and private job records are stored in the site's WordPress database and
+may also appear in backups managed by the site owner. PromptBridge schedules
+private job deletion after one day; WordPress Cron may run later than scheduled.
+Uninstalling the plugin removes its settings and private jobs, but does not
+delete site backups.
+
+The Codex runtime may keep its own local session or diagnostic history in the
+configured Codex home. PromptBridge does not inspect or delete that runtime
+history. The site owner controls the Codex home, its access, and its backups.
+OpenAI's handling and retention depend on the specific account and service terms
+used by the site owner. Review the applicable
+[OpenAI Privacy Policy](https://openai.com/policies/privacy-policy/) and
+[OpenAI Terms of Use](https://openai.com/policies/terms-of-use/).
+
+## Who can access information
+
+WordPress administrators can access plugin settings. A generation job is private
+and its status or preview is returned only to its owner if they can still edit
+the target post. The site owner and hosting provider may have access to the
+WordPress database and backups. OpenAI processes requested prompt and field
+content through the configured Codex account. GitHub receives ordinary request
+metadata when WordPress checks for plugin releases. Their respective privacy
+policies apply.
+
+## Your choices and requests
+
+Codex service access is off by default and controlled separately from accepting
+these terms and acknowledging this notice. An administrator can turn off service
+access in PromptBridge settings. If you need to access, correct, or delete
+information stored by a WordPress site, contact that site's owner or
+administrator. Requests about information handled by OpenAI or GitHub should be
+made through the relevant provider and account. Rights and request procedures
+depend on your location and relationship to the site.
+
+PromptBridge is an administrative tool and is not designed for children.
+
+## Contact
+
+For questions about this policy or PromptBridge's handling of information, use
+the [MrDemonWolf contact page](https://www.mrdemonwolf.com/contact/).
