@@ -19,5 +19,6 @@ if ( ! function_exists( 'wp_parse_url' ) ) {
 require_once dirname( __DIR__ ) . '/includes/class-runtime-path.php';
 require_once dirname( __DIR__ ) . '/includes/class-runtime-home.php';
 require_once dirname( __DIR__ ) . '/includes/class-runtime-probe.php';
+require_once dirname( __DIR__ ) . '/includes/class-app-server.php';
 require_once dirname( __DIR__ ) . '/includes/class-model-catalog.php';
 require_once dirname( __DIR__ ) . '/includes/class-github-updater.php';

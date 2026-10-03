@@ -1,11 +1,16 @@
 ---
 title: Security and privacy
-description: Trust boundaries, consent, and controls in the staging alpha.
+description: Trust boundaries, policy acceptance, and consent controls.
 ---
 
 ## Current controls
 
 - A dedicated `mdw_pbd_manage` capability protects the settings page.
+- A site administrator must accept the current Terms of Use and acknowledge the
+  current Privacy Policy before settings are available. Generation checks this
+  acceptance again on each REST request and background job.
+- Policy acceptance stores the policy versions, timestamp, and administrator's
+  WordPress user ID. A policy version change requires acceptance again.
 - Nonces protect settings and diagnostic writes.
 - Runtime paths are absolute, canonicalized, and configured outside browser
   input.
@@ -24,10 +29,12 @@ description: Trust boundaries, consent, and controls in the staging alpha.
 
 ## External service disclosure
 
-Future requested generation may send a prompt, selected Divi content, account
-data, and runtime metadata to OpenAI through Codex. Administrators must opt in
-before PromptBridge launches Codex. See the
-[OpenAI privacy policy](https://openai.com/policies/privacy-policy/) and
+After a site administrator separately opts in, requested generation sends the
+instruction and selected Divi Text field content to OpenAI through the
+separately installed Codex runtime. Plugin terms acceptance does not enable this
+service access. See the PromptBridge [Terms of Use](/docs/terms) and
+[Privacy Policy](/docs/privacy), plus OpenAI's
+[privacy policy](https://openai.com/policies/privacy-policy/) and
 [terms of use](https://openai.com/policies/terms-of-use/).
 
 ## Generated code

@@ -1,8 +1,9 @@
 import { RootProvider } from 'fumadocs-ui/provider/next';
 import type { Metadata } from 'next';
-import { Instrument_Sans } from 'next/font/google';
+import { Instrument_Sans, Instrument_Serif } from 'next/font/google';
 import type { ReactNode } from 'react';
 import './global.css';
+import './marketing.css';
 
 const instrumentSans = Instrument_Sans({
 	display: 'swap',
@@ -10,21 +11,29 @@ const instrumentSans = Instrument_Sans({
 	variable: '--font-instrument-sans',
 });
 
+const instrumentSerif = Instrument_Serif({
+	display: 'swap',
+	style: ['normal', 'italic'],
+	subsets: ['latin'],
+	weight: '400',
+	variable: '--font-instrument-serif',
+});
+
 const description =
-	'Setup, architecture, security, and release documentation for PromptBridge for Divi.';
+	'Draft text for Divi 5 with a server-owned Codex runtime, administrator opt-in, and a separate review before applying.';
 
 export const metadata: Metadata = {
 	metadataBase: new URL('https://promptbridge.mrdemonwolf.dev/'),
 	title: {
-		default: 'PromptBridge for Divi',
-		template: '%s | PromptBridge for Divi',
+		default: 'PromptBridge',
+		template: '%s | PromptBridge',
 	},
 	description,
 	openGraph: {
-		title: 'PromptBridge for Divi',
+		title: 'PromptBridge',
 		description,
 		type: 'website',
-		siteName: 'PromptBridge for Divi',
+		siteName: 'PromptBridge',
 	},
 };
 
@@ -32,7 +41,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 	return (
 		<html
 			lang="en"
-			className={instrumentSans.variable}
+			className={`${instrumentSans.variable} ${instrumentSerif.variable}`}
 			suppressHydrationWarning
 		>
 			<body>

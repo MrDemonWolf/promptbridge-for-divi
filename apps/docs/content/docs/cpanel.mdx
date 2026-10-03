@@ -1,0 +1,36 @@
+---
+title: cPanel setup
+description: Prepare a cPanel WordPress host for a staging test.
+---
+
+PromptBridge for Divi is an alpha. cPanel compatibility has not been confirmed.
+Test on a staging site and keep a backup before installing.
+
+## Check the host
+
+Confirm the account has PHP 8.3 or newer and that the installed Codex CLI is
+available to the PHP process under the same account. PHP-FPM and command-line
+PHP can use different versions, paths, and environment variables.
+
+The plugin requires a private Codex home for the WordPress account. Sign in to
+that isolated home yourself; do not copy credentials from a developer account.
+Keep the home outside the public web directory with access limited to the site
+owner.
+
+## Run queued jobs
+
+The editor request queues a generation job. WordPress Cron runs it in a later
+request. If the host disables WP-Cron or blocks loopback requests, configure a
+cPanel cron to visit `https://your-site.example/wp-cron.php?doing_wp_cron` every
+few minutes. Replace the example domain and follow your host's scheduling
+instructions.
+
+If the host disables `proc_open`, blocks outbound API access, or imposes a short
+PHP execution limit, generation may fail. The plugin does not install or update
+Codex, and it does not expose Codex App Server on a network port.
+
+## Test
+
+Start with a disposable Divi Text module. Check queueing, cron execution,
+preview, cancel, apply, and page save. Review the host's PHP error log if a job
+fails. These steps are a test checklist, not evidence that cPanel is supported.

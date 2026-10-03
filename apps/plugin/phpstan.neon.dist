@@ -4,6 +4,7 @@ parameters:
 		- includes/class-runtime-home.php
 		- includes/class-runtime-path.php
 		- includes/class-runtime-probe.php
+		- includes/class-app-server.php
 		- includes/class-model-catalog.php
 		- tests
 	scanFiles:

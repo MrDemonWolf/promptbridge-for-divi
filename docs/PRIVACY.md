@@ -22,20 +22,34 @@ does not store the raw 443 KB catalog. Refresh happens only from that explicit
 action, never from a background cron launch, and a failed refresh preserves the
 last-good cache.
 
-## Future service use
+## Requested text generation
 
-Only after an administrator opts in and a user requests generation may Codex
-send data to OpenAI. Expected data includes the prompt, selected Divi content,
-account/runtime metadata, and any explicitly attached supported input.
+After an administrator opts in and an authorized editor requests generation,
+PromptBridge sends the instruction and selected Divi Text field content to
+OpenAI through the server owner's signed-in Codex runtime. The private job
+stores the prompt and selected content only while queued or running, then
+removes them. A sanitized preview result stays in the private job for up to one
+day. Plugin activation and ordinary page loads do not contact OpenAI.
 
 - Privacy: https://openai.com/policies/privacy-policy/
 - Terms: https://openai.com/policies/terms-of-use/
 
-The exact destination and fields must be revalidated against the pinned Codex
-release before M2. PromptBridge must not claim that content remains local.
+The current App Server protocol is experimental and not pinned by this staging
+alpha. PromptBridge does not claim that content remains local or that all host
+setups can use this integration.
 
 ## Logs
 
-Future logs must exclude credentials, cookies, bearer tokens, full prompts by
-default, and unbounded process output. Owners need a clear retention and delete
-control before job logging ships.
+Process errors shown to the editor are generic and omit stderr. Private job
+records are scheduled for removal after one day when WordPress Cron runs, and
+are removed on plugin uninstall.
+
+## Policy acceptance
+
+Before settings and generation are available, a site administrator accepts the
+current Terms of Use and acknowledges the current Privacy Policy. The plugin
+stores both policy version identifiers, the acceptance timestamp, and that
+administrator's WordPress user ID in the `mdw_pbd_settings` option. This record
+is separate from the optional OpenAI service-access choice. Updating either
+policy version requires fresh acceptance; the service-access choice is reset off
+at that point.
