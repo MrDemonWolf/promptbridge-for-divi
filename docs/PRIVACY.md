@@ -51,5 +51,5 @@ current Terms of Use and acknowledges the current Privacy Policy. The plugin
 stores both policy version identifiers, the acceptance timestamp, and that
 administrator's WordPress user ID in the `mdw_pbd_settings` option. This record
 is separate from the optional OpenAI service-access choice. Updating either
-policy version requires fresh acceptance; the service-access choice is reset
-off at that point.
+policy version requires fresh acceptance; the service-access choice is reset off
+at that point.

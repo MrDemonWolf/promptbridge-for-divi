@@ -37,10 +37,10 @@ flowchart LR
 
 The job and Divi field flow are implemented for staging. The PHP client uses
 fixed JSONL messages, a dedicated `CODEX_HOME`, read-only permissions, bounded
-input/output, and a timeout. The App Server is experimental, the protocol is
-not pinned in this release, and the client does not use generated schemas.
-Treat its test fixture as parser coverage, not upstream compatibility proof.
-Live account, Divi Undo/Save, and target cPanel checks remain open.
+input/output, and a timeout. The App Server is experimental, the protocol is not
+pinned in this release, and the client does not use generated schemas. Treat its
+test fixture as parser coverage, not upstream compatibility proof. Live account,
+Divi Undo/Save, and target cPanel checks remain open.
 
 ## Ownership
 

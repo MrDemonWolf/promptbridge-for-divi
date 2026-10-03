@@ -7,7 +7,7 @@
 | PHP       | 8.3              | Local checks target 8.3-8.5                                                 |
 | WordPress | 6.7              | Syntax/lifecycle only; full WP test pending                                 |
 | Divi      | 5                | Text field action implemented; live preview, Undo, Save, and reload pending |
-| Codex     | Not pinned       | Experimental App Server; one LocalWP request returned 401 unauthenticated  |
+| Codex     | Not pinned       | Experimental App Server; one LocalWP request returned 401 unauthenticated   |
 | cPanel    | No blanket claim | Exact host test pending                                                     |
 | Multisite | Unsupported      | Lifecycle/permission tests absent                                           |
 

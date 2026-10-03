@@ -29,5 +29,6 @@ instructions. Remove that cron before uninstalling the plugin.
 
 The worker uses a database lock and a 30-second Codex App Server timeout. Check
 cPanel's PHP-FPM and CLI limits separately; this does not prove the host can
-finish jobs. LocalWP's test home returned `401 Missing bearer or basic
-authentication`, so sign-in and one real text result remain unverified.
+finish jobs. LocalWP's test home returned
+`401 Missing bearer or basic authentication`, so sign-in and one real text
+result remain unverified.

@@ -29,7 +29,8 @@ bin/build-zip.sh
       non-autoloaded option.
 - [x] Each pipe drain has a fixed read budget so the deadline is rechecked.
 - [x] A stalled process reaches the timeout path.
-- [x] App Server fixture covers handshake, thread/turn flow, and a completed text item.
+- [x] App Server fixture covers handshake, thread/turn flow, and a completed
+      text item.
 - [x] PHP coding standards and focused static analysis.
 - [x] Docs strict type-check and static export.
 - [x] Installable ZIP construction from distribution files only.
@@ -52,7 +53,8 @@ bin/build-zip.sh
 - [ ] Framing errors, malformed events, crashes, timeout, and uncertain
       completion.
 - [ ] Duplicate jobs, locks, owner isolation, cancellation, and cleanup.
-- [ ] One real subscription-backed text result (LocalWP returned HTTP 401 because the dedicated home is not authenticated).
+- [ ] One real subscription-backed text result (LocalWP returned HTTP 401
+      because the dedicated home is not authenticated).
 - [ ] Exact licensed Divi control behavior without double-triggering hosted AI.
 - [ ] Preview, baseline conflict rejection, apply, undo, save, and reload.
 - [ ] Same-client image feasibility and real-file validation.
