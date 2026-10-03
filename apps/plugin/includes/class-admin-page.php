@@ -135,7 +135,23 @@ final class Admin_Page {
 		$notice_code = '';
 		$tab         = 'general';
 
-		if ( 'save_consent' === $action ) {
+		if ( ! Plugin::legal_acceptance_current() && 'accept_policies' !== $action ) {
+			$notice_code = 'policies_required';
+		} elseif ( 'accept_policies' === $action ) {
+			$accept_terms        = isset( $_POST['mdw_pbd_accept_terms'] ) && is_string( $_POST['mdw_pbd_accept_terms'] )
+				? wp_unslash( $_POST['mdw_pbd_accept_terms'] )
+				: '';
+			$acknowledge_privacy = isset( $_POST['mdw_pbd_acknowledge_privacy'] ) && is_string( $_POST['mdw_pbd_acknowledge_privacy'] )
+				? wp_unslash( $_POST['mdw_pbd_acknowledge_privacy'] )
+				: '';
+			if ( '1' !== $accept_terms || '1' !== $acknowledge_privacy ) {
+				$notice_code = 'policies_required';
+			} else {
+				$notice_code = Plugin::record_legal_acceptance( get_current_user_id() )
+					? 'policies_accepted'
+					: 'settings_save_failed';
+			}
+		} elseif ( 'save_consent' === $action ) {
 			$model = isset( $_POST['mdw_pbd_model'] ) && is_string( $_POST['mdw_pbd_model'] )
 				? sanitize_text_field( wp_unslash( $_POST['mdw_pbd_model'] ) )
 				: Plugin::selected_model();
@@ -204,12 +220,44 @@ final class Admin_Page {
 		$notices     = array(
 			'invalid_model'        => array( 'error', __( 'Choose one of the supported models.', 'promptbridge-for-divi' ) ),
 			'settings_save_failed' => array( 'error', __( 'PromptBridge could not save those settings. Try again.', 'promptbridge-for-divi' ) ),
+			'policies_required'    => array( 'error', __( 'Accept the current Terms of Use and acknowledge the Privacy Policy before continuing.', 'promptbridge-for-divi' ) ),
+			'policies_accepted'    => array( 'success', __( 'Policies accepted. You can now configure PromptBridge.', 'promptbridge-for-divi' ) ),
 			'consent_saved'        => array( 'success', __( 'Service consent and model saved.', 'promptbridge-for-divi' ) ),
 			'consent_withdrawn'    => array( 'success', __( 'Service consent withdrawn. Codex will not be launched.', 'promptbridge-for-divi' ) ),
 			'diagnostics_finished' => array( 'info', __( 'Diagnostics finished.', 'promptbridge-for-divi' ) ),
 		);
 		$notice      = isset( $notices[ $notice_code ] ) ? $notices[ $notice_code ][1] : '';
 		$notice_type = isset( $notices[ $notice_code ] ) ? $notices[ $notice_code ][0] : 'success';
+
+		if ( ! Plugin::legal_acceptance_current() ) {
+			?>
+			<div class="wrap mdw-pbd-wrap">
+				<?php if ( '' !== $notice ) : ?>
+					<div class="notice notice-<?php echo esc_attr( $notice_type ); ?> is-dismissible"><p><?php echo esc_html( $notice ); ?></p></div>
+				<?php endif; ?>
+				<section class="mdw-pbd-panel" aria-labelledby="mdw-pbd-title">
+					<header class="mdw-pbd-panel-header">
+						<span class="mdw-pbd-mark" aria-hidden="true">PB</span>
+						<div class="mdw-pbd-heading">
+							<h1 id="mdw-pbd-title"><?php esc_html_e( 'PromptBridge for Divi', 'promptbridge-for-divi' ); ?></h1>
+							<p><?php esc_html_e( 'Review these policies before configuring or using the plugin.', 'promptbridge-for-divi' ); ?></p>
+						</div>
+						<span class="mdw-pbd-release"><?php esc_html_e( 'Staging alpha', 'promptbridge-for-divi' ); ?></span>
+					</header>
+					<div class="mdw-pbd-section-heading"><?php esc_html_e( 'Policies', 'promptbridge-for-divi' ); ?></div>
+					<form method="post" class="mdw-pbd-options">
+						<?php wp_nonce_field( self::NONCE_ACTION ); ?>
+						<input type="hidden" name="mdw_pbd_action" value="accept_policies" />
+						<p><?php esc_html_e( 'A site administrator must accept the Terms of Use and acknowledge the Privacy Policy for this site. OpenAI service access remains a separate, optional setting.', 'promptbridge-for-divi' ); ?></p>
+						<p><label><input type="checkbox" name="mdw_pbd_accept_terms" value="1" required /> <?php esc_html_e( 'I agree to the PromptBridge Terms of Use.', 'promptbridge-for-divi' ); ?></label> <a href="https://promptbridge.mrdemonwolf.dev/docs/terms" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Read Terms of Use', 'promptbridge-for-divi' ); ?></a></p>
+						<p><label><input type="checkbox" name="mdw_pbd_acknowledge_privacy" value="1" required /> <?php esc_html_e( 'I have read and acknowledge the Privacy Policy.', 'promptbridge-for-divi' ); ?></label> <a href="https://promptbridge.mrdemonwolf.dev/docs/privacy" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Read Privacy Policy', 'promptbridge-for-divi' ); ?></a></p>
+						<p><button type="submit" class="button button-primary"><?php esc_html_e( 'Accept and continue', 'promptbridge-for-divi' ); ?></button></p>
+					</form>
+				</section>
+			</div>
+			<?php
+			return;
+		}
 
 		$results = $this->diagnostics->collect( false );
 		if ( 'diagnostics' === $tab ) {
@@ -283,7 +331,8 @@ final class Admin_Page {
 						<div class="mdw-pbd-option-row">
 							<div class="mdw-pbd-option-copy">
 								<span class="mdw-pbd-option-label"><?php esc_html_e( 'Allow Codex service access', 'promptbridge-for-divi' ); ?></span>
-								<p><?php esc_html_e( 'When generation is implemented and you request it, Codex may send prompts, selected Divi content, account data, and runtime metadata to OpenAI.', 'promptbridge-for-divi' ); ?></p>
+								<p><?php esc_html_e( 'When you request text generation, PromptBridge sends your instruction and the selected Text field content to OpenAI through the separately installed Codex runtime and its signed-in account.', 'promptbridge-for-divi' ); ?></p>
+								<p class="mdw-pbd-policy-links"><a href="https://promptbridge.mrdemonwolf.dev/docs/terms" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'PromptBridge Terms of Use', 'promptbridge-for-divi' ); ?></a><span aria-hidden="true"> · </span><a href="https://promptbridge.mrdemonwolf.dev/docs/privacy" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'PromptBridge Privacy Policy', 'promptbridge-for-divi' ); ?></a></p>
 								<p class="mdw-pbd-policy-links"><a href="https://openai.com/policies/privacy-policy/" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Privacy policy', 'promptbridge-for-divi' ); ?></a><span aria-hidden="true"> · </span><a href="https://openai.com/policies/terms-of-use/" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Terms', 'promptbridge-for-divi' ); ?></a></p>
 							</div>
 							<label class="mdw-pbd-switch">
@@ -330,7 +379,7 @@ define( 'MDW_PBD_CODEX_HOME', '/private/path/to/promptbridge-codex-home' );</cod
 					<div class="mdw-pbd-section-heading"><?php esc_html_e( 'Advanced', 'promptbridge-for-divi' ); ?></div>
 					<div class="mdw-pbd-advanced">
 						<h2><?php esc_html_e( 'Current alpha scope', 'promptbridge-for-divi' ); ?></h2>
-						<p><?php esc_html_e( 'This build validates the host, stores explicit consent, and caches the installed Codex model list. Content generation and Divi editor controls are not available yet.', 'promptbridge-for-divi' ); ?></p>
+						<p><?php esc_html_e( 'This staging alpha can request text generation from the Divi Text module and keeps results in a preview until an editor applies them. Hosting compatibility and live-account behavior remain unproven.', 'promptbridge-for-divi' ); ?></p>
 						<h2><?php esc_html_e( 'Runtime ownership', 'promptbridge-for-divi' ); ?></h2>
 						<p><?php esc_html_e( 'The server owner installs and updates Codex. PromptBridge only uses the fixed executable and private home configured in wp-config.php.', 'promptbridge-for-divi' ); ?></p>
 					</div>
