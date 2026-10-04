@@ -198,7 +198,7 @@
 	margin-top: 0.14em;
 }
 
-.marketing-lede {
+.marketing-shell .marketing-lede {
 	color: #33415b;
 	font-size: clamp(1.04rem, 1.35vw, 1.17rem);
 	line-height: 1.65;
@@ -254,7 +254,7 @@
 	border-color: rgb(9 21 51 / 42%);
 }
 
-.marketing-disclosure {
+.marketing-shell .marketing-disclosure {
 	align-items: flex-start;
 	background: rgb(255 253 248 / 72%);
 	border-left: 3px solid var(--blue);
@@ -1018,9 +1018,9 @@
 		max-width: 10.5ch;
 	}
 
-	.marketing-lede {
+	.marketing-shell .marketing-lede {
 		font-size: 1.04rem;
-		margin-top: 1.3rem;
+		margin: 1.3rem 0 1.7rem;
 	}
 
 	.marketing-actions {
