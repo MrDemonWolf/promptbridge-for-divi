@@ -9,6 +9,7 @@ export function baseOptions(): BaseLayoutProps {
 		},
 		githubUrl: 'https://github.com/MrDemonWolf/promptbridge-for-divi',
 		links: [
+			{ text: 'Home', url: '/', active: 'url' },
 			{ text: 'Overview', url: '/docs', active: 'nested-url' },
 			{ text: 'Setup', url: '/docs/setup', active: 'url' },
 			{ text: 'Security', url: '/docs/security', active: 'url' },
