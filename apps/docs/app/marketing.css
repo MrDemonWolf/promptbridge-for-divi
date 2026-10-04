@@ -241,7 +241,7 @@
 }
 
 .marketing-button-primary:hover {
-	background: #102651;
+	background: var(--button-hover);
 }
 
 .marketing-button-secondary {
@@ -990,7 +990,8 @@
 }
 
 @media (max-width: 560px) {
-	.marketing-nav-links a:first-child {
+	.marketing-nav-links a:first-child,
+	.marketing-nav-links .marketing-nav-source {
 		display: none;
 	}
 
@@ -1105,4 +1106,147 @@
 		scroll-behavior: auto !important;
 		transition-duration: 0.01ms !important;
 	}
+}
+
+/* Keep the marketing page in step with the shared Fumadocs theme control. */
+.marketing-shell {
+	--button-hover: #102651;
+	--feature-panel: #091533;
+	color-scheme: light;
+}
+
+.marketing-cta {
+	background: var(--paper-deep);
+}
+
+.marketing-hero .marketing-lede {
+	color: #33415b;
+}
+
+.marketing-nav-links .marketing-theme-switch {
+	background: var(--paper-light);
+	border-color: var(--line);
+	color: var(--muted);
+	cursor: pointer;
+	flex: 0 0 auto;
+	height: 2.75rem;
+	transition:
+		background-color 160ms ease,
+		border-color 160ms ease,
+		color 160ms ease;
+	width: 4rem;
+}
+
+.marketing-nav-links .marketing-theme-switch svg {
+	height: 1.5rem;
+	padding: 0.3rem;
+	width: 1.5rem;
+}
+
+.marketing-footer {
+	--ink: #091533;
+	--paper-light: #f8fafc;
+}
+
+.dark .marketing-shell {
+	--paper: #0b1424;
+	--paper-light: #111f33;
+	--paper-deep: #192b45;
+	--ink: #e8f1fb;
+	--muted: #b0bfd2;
+	--line: #304764;
+	--blue: #72d4f4;
+	--cyan: #0faced;
+	--button-hover: #a2e7fb;
+	--feature-panel: #14243a;
+	background:
+		radial-gradient(
+			ellipse 44rem 35rem at 80% 14%,
+			rgb(15 172 237 / 15%),
+			transparent 71%
+		),
+		radial-gradient(
+			ellipse 38rem 32rem at 10% 45%,
+			rgb(99 116 153 / 12%),
+			transparent 72%
+		),
+		linear-gradient(180deg, #101c31 0%, var(--paper) 47rem, #08111f 100%);
+	color-scheme: dark;
+}
+
+.dark .marketing-grid {
+	background-image:
+		linear-gradient(rgb(177 203 238 / 4%) 1px, transparent 1px),
+		linear-gradient(90deg, rgb(177 203 238 / 4%) 1px, transparent 1px);
+}
+
+.dark .marketing-nav {
+	border-bottom-color: rgb(208 224 246 / 14%);
+}
+
+.dark .marketing-brand .brand-lockup-descriptor {
+	color: #a7b9d2;
+}
+
+.dark .marketing-nav-links .marketing-nav-source {
+	border-color: rgb(208 224 246 / 24%);
+}
+
+.dark .marketing-hero .marketing-lede {
+	color: #c4d1e3;
+}
+
+.dark .marketing-button-primary:hover {
+	background: var(--button-hover);
+	color: #091533 !important;
+}
+
+.dark .marketing-button-secondary {
+	border-color: rgb(208 224 246 / 30%);
+}
+
+.dark .marketing-button-secondary:hover {
+	background: rgb(17 31 51 / 90%);
+	border-color: rgb(208 224 246 / 52%);
+}
+
+.dark .marketing-disclosure {
+	background: rgb(17 31 51 / 88%);
+	border-color: rgb(208 224 246 / 18%);
+	color: #c4d1e3;
+}
+
+.dark .marketing-disclosure strong {
+	color: #f1f6fc;
+}
+
+.dark .workflow-illustration {
+	background:
+		radial-gradient(ellipse at 52% 42%, rgb(15 172 237 / 17%), transparent 65%),
+		linear-gradient(145deg, #182a43, #101c2f);
+	border-color: rgb(208 224 246 / 16%);
+	box-shadow: 0 1.4rem 3.5rem rgb(0 0 0 / 30%);
+}
+
+.dark .illustration-label,
+.dark .illustration-label span:last-child,
+.dark .workflow-illustration figcaption {
+	color: #b5c4d8;
+}
+
+.dark .workflow-section {
+	border-block-color: rgb(208 224 246 / 12%);
+}
+
+.dark .alpha-section {
+	background: var(--feature-panel);
+}
+
+.dark .marketing-cta {
+	border-color: rgb(208 224 246 / 12%);
+}
+
+.marketing-nav-links .marketing-theme-switch:hover {
+	border-color: var(--blue);
+	color: var(--ink);
 }
