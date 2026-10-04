@@ -1,19 +1,10 @@
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
+import { BrandLockup } from './brand-lockup';
 
 export function baseOptions(): BaseLayoutProps {
 	return {
 		nav: {
-			title: (
-				<span className="docs-brand">
-					<img
-						className="brand-icon"
-						src="/icon.svg"
-						alt=""
-						aria-hidden="true"
-					/>
-					<span className="brand-wordmark">PromptBridge for Divi</span>
-				</span>
-			),
+			title: <BrandLockup className="docs-brand" />,
 			url: '/',
 		},
 		githubUrl: 'https://github.com/MrDemonWolf/promptbridge-for-divi',

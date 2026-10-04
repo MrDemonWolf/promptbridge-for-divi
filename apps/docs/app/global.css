@@ -19,8 +19,7 @@ html {
 }
 
 body {
-	font-family:
-		var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+	font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
 	margin: 0;
 }
 
@@ -38,29 +37,59 @@ body {
 	top: 1rem;
 }
 
-.brand-wordmark {
-	color: #087da8;
-	font-weight: 700;
-	letter-spacing: -0.02em;
-}
-
-.dark .brand-wordmark,
-.home-shell .brand-wordmark {
-	color: var(--mdw-cyan);
-}
-
-.docs-brand {
+.brand-lockup {
 	align-items: center;
 	display: inline-flex;
-	gap: 0.55rem;
+	gap: 0.65rem;
 }
 
-.brand-icon {
-	background: #f8fafc;
-	border-radius: 0.4rem;
-	height: 1.75rem;
-	padding: 0.2rem;
-	width: 1.75rem;
+.brand-lockup-mark {
+	display: block;
+	flex: 0 0 auto;
+	height: 2.25rem;
+	width: 2.25rem;
+}
+
+.brand-lockup-copy {
+	display: grid;
+	gap: 0.18rem;
+	line-height: 1;
+}
+
+.brand-lockup-name {
+	color: inherit;
+	font-family: var(--font-bricolage-grotesque), sans-serif;
+	font-size: 1.08rem;
+	font-weight: 700;
+	letter-spacing: -0.045em;
+	white-space: nowrap;
+}
+
+.brand-lockup-accent {
+	color: #087da8;
+}
+
+.brand-lockup-descriptor {
+	color: #687991;
+	font-family: var(--font-ibm-plex-sans), sans-serif;
+	font-size: 0.54rem;
+	font-weight: 700;
+	letter-spacing: 0.16em;
+	line-height: 1.25;
+	text-transform: uppercase;
+}
+
+.dark .brand-lockup-accent {
+	color: #55c8ef;
+}
+
+.dark .brand-lockup-descriptor {
+	color: #a7b8d0;
+}
+
+.docs-brand .brand-lockup-mark {
+	height: 2rem;
+	width: 2rem;
 }
 
 .home-shell {

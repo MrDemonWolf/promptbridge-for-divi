@@ -8,6 +8,7 @@ import {
 	ShieldCheck,
 } from 'lucide-react';
 import Link from 'next/link';
+import { BrandLockup } from '../lib/brand-lockup';
 
 const safeguards = [
 	{
@@ -39,10 +40,9 @@ export default function HomePage() {
 				<a
 					className="marketing-brand"
 					href="#top"
-					aria-label="PromptBridge home"
+					aria-label="PromptBridge for Divi home"
 				>
-					<img src="/icon.svg" alt="" aria-hidden="true" />
-					<span>PromptBridge</span>
+					<BrandLockup />
 				</a>
 				<div className="marketing-nav-links">
 					<a href="#workflow">How it works</a>
@@ -277,10 +277,9 @@ export default function HomePage() {
 							<a
 								className="marketing-brand footer-brand"
 								href="#top"
-								aria-label="PromptBridge home"
+								aria-label="PromptBridge for Divi home"
 							>
-								<img src="/icon.svg" alt="" aria-hidden="true" />
-								<span>PromptBridge</span>
+								<BrandLockup />
 							</a>
 							<p className="footer-tagline">
 								Drafts stay drafts until you choose to apply them.

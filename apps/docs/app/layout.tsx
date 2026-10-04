@@ -1,22 +1,21 @@
 import { RootProvider } from 'fumadocs-ui/provider/next';
 import type { Metadata } from 'next';
-import { Instrument_Sans, Instrument_Serif } from 'next/font/google';
+import { Bricolage_Grotesque, IBM_Plex_Sans } from 'next/font/google';
 import type { ReactNode } from 'react';
 import './global.css';
 import './marketing.css';
 
-const instrumentSans = Instrument_Sans({
+const bricolageGrotesque = Bricolage_Grotesque({
 	display: 'swap',
 	subsets: ['latin'],
-	variable: '--font-instrument-sans',
+	variable: '--font-bricolage-grotesque',
 });
 
-const instrumentSerif = Instrument_Serif({
+const ibmPlexSans = IBM_Plex_Sans({
 	display: 'swap',
-	style: ['normal', 'italic'],
 	subsets: ['latin'],
-	weight: '400',
-	variable: '--font-instrument-serif',
+	weight: ['400', '500', '600', '700'],
+	variable: '--font-ibm-plex-sans',
 });
 
 const description =
@@ -41,7 +40,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 	return (
 		<html
 			lang="en"
-			className={`${instrumentSans.variable} ${instrumentSerif.variable}`}
+			className={`${bricolageGrotesque.variable} ${ibmPlexSans.variable}`}
 			suppressHydrationWarning
 		>
 			<body>
