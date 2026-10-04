@@ -1,55 +1,94 @@
 ---
 title: Setup
-description:
-  Install the staging alpha, configure Codex, and test the Divi Text action.
+description: Set up the staging alpha and safely test one Divi Text field.
 ---
 
-## Requirements
+<aside className="docs-quick-take" role="note">
+	<p className="docs-quick-label">BEFORE YOU START</p>
+	<p>
+		Use a staging WordPress site first. The server owner installs Codex; a
+		WordPress administrator installs PromptBridge and chooses whether to enable
+		service access.
+	</p>
+</aside>
+
+## What you need
 
 - WordPress 6.7 or newer
 - PHP 8.3 or newer
-- A server where `proc_open` is permitted
-- Divi 5 for the Text module Body action
-- An official Codex installation managed by the server owner
+- Divi 5
+- A server where PHP <code>proc_open</code> is allowed
+- A server owner who can install Codex and edit <code>wp-config.php</code>
 
-## Install
+## 1. Ask the server owner to prepare Codex
 
-1. Download the CI or release ZIP.
-2. Upload it through **Plugins > Add New > Upload Plugin**.
-3. Activate **PromptBridge for Divi**.
-4. Add server-owned configuration to `wp-config.php`:
+The server owner must create a dedicated Codex home for this site. It must be
+outside the public website folder, private to the PHP worker, and set to
+directory mode 0700. Add an empty <code>.promptbridge-for-divi</code> marker
+file to that folder.
+
+Add these server-owned settings to <code>wp-config.php</code>:
 
 ```php
 define( 'MDW_PBD_CODEX_PATH', '/absolute/path/to/codex' );
 define( 'MDW_PBD_CODEX_HOME', '/private/path/to/promptbridge-codex-home' );
 ```
 
-5. Sign Codex into that dedicated home. Do not copy a developer workstation's
-   global Codex home or credentials.
-6. Open **Divi > PromptBridge**.
-7. Review the OpenAI service disclosure and choose whether to opt in.
-8. Select **Run diagnostics**.
+Sign Codex in using that dedicated home. Do not copy a developer workstation's
+Codex folder or credentials.
 
-After consent, **Run diagnostics** executes the fixed local commands for the
-version probe and `codex debug models --bundled`. The model response is capped
-at 2 MB and strictly projected so only list-visible API models are cached in the
-non-autoloaded `mdw_pbd_model_catalog` option. The raw 443 KB catalog is not
-stored, and a failed refresh preserves the last-good cache. Refresh occurs only
-when this action is clicked. In the current Codex 0.155.1 staging result, the
-five models are Astra, Sol, Terra, Luna, and 5.5, with Luna as the default and
-fallback.
+## 2. Install PromptBridge
 
-The Codex home must be dedicated to this plugin, writable by the PHP worker,
-outside the public WordPress directory, and set to directory mode `0700`. Add an
-empty `.promptbridge-for-divi` marker file to confirm the path is reserved. Do
-not reuse a development account's global Codex home.
+1. Download the CI or release ZIP.
+2. In WordPress, open **Plugins > Add New > Upload Plugin**.
+3. Upload the ZIP, select **Install Now**, then **Activate**.
 
-The Divi Text Body action queues generation through WordPress Cron. A cPanel
-host may need a system cron that runs `wp-cron.php`; see the
-[cPanel setup](/docs/cpanel). The Codex App Server protocol is experimental, and
-target-host compatibility is not guaranteed.
+## 3. Accept the policies and choose service access
 
-## No runtime installer
+Open **Divi > PromptBridge**. If Divi's menu is unavailable, look under
+**Settings > PromptBridge**.
+
+1. Accept the current Terms of Use and acknowledge the Privacy Policy. WordPress
+   requires this before plugin settings are available.
+2. Read the service disclosure.
+3. Enable **Allow Codex service access** only if you want editors to request
+   text generation or an administrator to refresh the model list.
+
+This is an explicit opt-in. When an editor requests a draft, their instruction
+and the selected Text field content are sent to OpenAI through the separately
+installed Codex runtime.
+
+## 4. Check the server setup
+
+Select **Run diagnostics**. PromptBridge checks the local runtime and, with
+service access enabled, refreshes the model list. Nothing runs on page load. The
+diagnostic response is bounded and validated before model names are saved.
+
+## 5. Test one Text field
+
+Use a disposable staging page so you can safely practice.
+
+1. Open the page in Divi's Visual Builder.
+2. Open a Text module and find its **Body** field.
+3. Select **Generate with PromptBridge** and enter a short instruction.
+4. Wait for the separate preview. If the request stays queued, check that
+   WordPress Cron can run; cPanel sites may need a
+   [scheduled cron](/docs/cpanel).
+5. Review or edit the draft, then select **Apply to Divi field** if you want to
+   use it.
+6. Save the page in Divi and reload it to check the result.
+
+## If something goes wrong
+
+- **Codex runtime unavailable:** ask the server owner to check both paths in
+  <code>wp-config.php</code>, the private folder permissions, and whether
+  <code>proc_open</code> is allowed.
+- **Request stays queued:** check WordPress Cron. On a low-traffic site, a host
+  cron may be needed; see [cPanel setup](/docs/cpanel).
+- **You are unsure what gets sent:** read [Security and privacy](/docs/security)
+  before enabling service access.
+
+## Important boundary
 
 PromptBridge never downloads, installs, updates, replaces, or removes Codex. The
-host owner manages Codex independently.
+server owner manages Codex independently.

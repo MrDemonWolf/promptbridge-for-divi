@@ -3,48 +3,73 @@ title: Security and privacy
 description: Trust boundaries, policy acceptance, and consent controls.
 ---
 
-## Current controls
+<aside className="docs-quick-take" role="note">
+	<p className="docs-quick-label">THE SHORT ANSWER</p>
+	<p>
+		PromptBridge sends text to OpenAI only after an administrator accepts the
+		current policies, separately enables service access, and an editor requests
+		a draft. The draft stays in a preview until the editor applies it.
+	</p>
+</aside>
 
-- A dedicated `mdw_pbd_manage` capability protects the settings page.
+## What leaves your site
+
+When an editor requests a draft, PromptBridge sends their instruction and the
+selected Divi Text field content to OpenAI through the separately installed
+Codex runtime. The runtime uses the account signed in to its dedicated Codex
+home.
+
+Plugin activation and page load do not contact OpenAI. WordPress update checks
+may separately send the server IP address and ordinary request details to GitHub
+to check for releases.
+
+## What WordPress stores
+
+- While a job is queued or running, the request text is held in a private
+  WordPress job.
+- PromptBridge removes the instruction and source text when the job finishes or
+  fails.
+- The preview and job details are scheduled for deletion after one day.
+  WordPress Cron can run late, so cleanup may happen later.
+- The Codex runtime may keep its own session history in the dedicated Codex
+  home. PromptBridge does not manage or delete that history.
+
+## Who can request a draft
+
 - A site administrator must accept the current Terms of Use and acknowledge the
-  current Privacy Policy before settings are available. Generation checks this
-  acceptance again on each REST request and background job.
-- Policy acceptance stores the policy versions, timestamp, and administrator's
-  WordPress user ID. A policy version change requires acceptance again.
-- Nonces protect settings and diagnostic writes.
-- Runtime paths are absolute, canonicalized, and configured outside browser
-  input.
-- The version probe passes a fixed argv array to `proc_open`; no shell command
-  is built.
-- The consent-gated model probe uses fixed `debug models --bundled` arguments;
-  it runs only from **Run diagnostics**, not from a background cron launch.
-- Process duration and visible output are bounded.
-- Model responses are capped at 2 MB and pass strict projection validation.
-- Only list-visible API models are cached in the non-autoloaded
-  `mdw_pbd_model_catalog` option; the raw 443 KB catalog is never stored, and a
-  failed refresh preserves the last-good cache.
-- The dedicated Codex home must live outside the public WordPress tree.
-- All diagnostic output is escaped.
-- Activation performs no network request and installs no dependency.
+  current Privacy Policy.
+- An administrator must separately enable **Allow Codex service access**.
+- The editor must be signed in, have permission to edit that page, and have the
+  PromptBridge generation capability.
+- WordPress checks permission and consent again before the background job
+  starts. Turning off consent prevents queued work from starting.
 
-## External service disclosure
-
-After a site administrator separately opts in, requested generation sends the
-instruction and selected Divi Text field content to OpenAI through the
-separately installed Codex runtime. Plugin terms acceptance does not enable this
-service access. See the PromptBridge [Terms of Use](/docs/terms) and
-[Privacy Policy](/docs/privacy), plus OpenAI's
-[privacy policy](https://openai.com/policies/privacy-policy/) and
+See the [Terms of Use](/docs/terms) and [Privacy Policy](/docs/privacy) for the
+full policies. Also review
+[OpenAI's privacy policy](https://openai.com/policies/privacy-policy/) and
 [terms of use](https://openai.com/policies/terms-of-use/).
+
+## What PromptBridge protects
+
+- WordPress verifies the signed-in user, page-edit permission, current policy
+  acceptance, and service consent.
+- The browser cannot choose a Codex executable or add command-line arguments. A
+  server owner sets the absolute path and private Codex home in
+  <code>wp-config.php</code>.
+- Codex runs as a local process over stdio. PromptBridge does not expose an
+  app-server network port.
+- Runtime time and output are bounded. Model catalog data is size-limited and
+  validated before it is cached.
+- Diagnostic output is escaped before it is displayed.
+- Activation makes no external request and installs no dependency.
 
 ## Generated code
 
-PromptBridge will not execute generated PHP or JavaScript. Code insertion stays
-disabled while its protocol, authorization, and sanitization controls remain
-unproven.
+PromptBridge does not execute generated PHP or JavaScript. The current action is
+for text in a Divi Text module.
 
 ## Uninstall
 
-Uninstall removes plugin options, schedules, and capabilities. It preserves
-published pages, media, the independently installed Codex executable, and any
-credentials not owned by this plugin.
+Uninstall removes PromptBridge's settings, scheduled work, and capabilities. It
+preserves published pages, media, the separately installed Codex executable, and
+credentials it does not own.

@@ -1,36 +1,46 @@
 ---
 title: cPanel setup
-description: Prepare a cPanel WordPress host for a staging test.
+description: Prepare a cPanel site for a careful staging test.
 ---
 
-PromptBridge for Divi is an alpha. cPanel compatibility has not been confirmed.
-Test on a staging site and keep a backup before installing.
+<aside className="docs-quick-take" role="note">
+	<p className="docs-quick-label">IMPORTANT</p>
+	<p>
+		PromptBridge has not been confirmed on cPanel. Test on a staging site and
+		keep a backup. One successful cPanel test does not prove support for every
+		host.
+	</p>
+</aside>
 
-## Check the host
+## 1. Ask the host owner to check the server
 
-Confirm the account has PHP 8.3 or newer and that the installed Codex CLI is
-available to the PHP process under the same account. PHP-FPM and command-line
-PHP can use different versions, paths, and environment variables.
+Confirm that the site uses PHP 8.3 or newer, allows <code>proc_open</code>, and
+can run the installed Codex CLI from the PHP worker. The PHP version and paths
+used by PHP-FPM can differ from the command line.
 
-The plugin requires a private Codex home for the WordPress account. Sign in to
-that isolated home yourself; do not copy credentials from a developer account.
-Keep the home outside the public web directory with access limited to the site
-owner.
+Create a dedicated Codex home for the site. Keep it outside the public website
+folder and make it writable only by the site owner/PHP worker. Sign in to this
+home yourself. Never copy credentials from a developer account.
 
-## Run queued jobs
+## 2. Make sure queued jobs can run
 
-The editor request queues a generation job. WordPress Cron runs it in a later
-request. If the host disables WP-Cron or blocks loopback requests, configure a
-cPanel cron to visit `https://your-site.example/wp-cron.php?doing_wp_cron` every
-few minutes. Replace the example domain and follow your host's scheduling
-instructions.
+WordPress Cron starts queued work when WordPress gets a visit. On a quiet site,
+a job may wait. If your host disables WP-Cron or blocks loopback requests,
+configure a cPanel cron to visit
 
-If the host disables `proc_open`, blocks outbound API access, or imposes a short
-PHP execution limit, generation may fail. The plugin does not install or update
-Codex, and it does not expose Codex App Server on a network port.
+<code>https://your-site.example/wp-cron.php?doing_wp_cron</code> every few
+minutes. Replace the example domain with your site and follow your host's
+scheduling instructions.
 
-## Test
+Generation may fail if the host blocks <code>proc_open</code>, outbound API
+access, or the time Codex needs to respond. PromptBridge does not install or
+update Codex, and it does not expose Codex App Server on a network port.
 
-Start with a disposable Divi Text module. Check queueing, cron execution,
-preview, cancel, apply, and page save. Review the host's PHP error log if a job
-fails. These steps are a test checklist, not evidence that cPanel is supported.
+## 3. Test one page safely
+
+Use a disposable Divi Text module. Request a draft, check that the job runs,
+review the preview, choose whether to apply it, then save and reload the page.
+
+If a job fails, check the host's PHP error log and the WordPress Cron schedule.
+This checklist helps diagnose one staging site; it is not evidence that cPanel
+is supported.

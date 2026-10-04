@@ -1,20 +1,42 @@
 ---
 title: Limitations and gates
-description: Claims this staging alpha does not make.
+description: What this staging alpha can do, and what has not been proven.
 ---
 
-The following items are unproven:
+<aside className="docs-quick-take" role="note">
+	<p className="docs-quick-label">BEFORE YOU USE IT</p>
+	<p>
+		The text-generation workflow is present, but this is still a staging alpha.
+		Do not assume it is supported on every host or ready for production.
+	</p>
+</aside>
 
-- production support or stability of `codex app-server`;
-- ChatGPT-managed login, refresh, disconnect, and cancellation on the target
-  host;
-- subscription-backed image output through a custom app-server client;
-- shared cPanel support for persistent or queued Codex work;
-- interception of only Divi's built-in AI action;
-- live Divi undo, responsive value, and save/reload behavior (stale desktop
-  content is checked before Apply);
-- WordPress.org eligibility or approval; and
-- trademark or slug clearance.
+## Server and account behavior
 
-The separately billed OpenAI Image API is not a substitute for the requested
-subscription-backed image proof. Passing Plugin Check is not directory approval.
+- <code>codex app-server</code> is experimental. Production support and
+  reliability have not been established.
+- The plugin uses a Codex account already signed in to the dedicated server-side
+  Codex home. Login, refresh, and account-management flows are not provided by
+  the plugin.
+- WordPress Cron may delay queued work. cPanel and other shared-host
+  compatibility have not been confirmed.
+
+## Divi behavior
+
+- PromptBridge adds a separate action to the Text module. It does not intercept
+  or replace Divi's built-in AI action.
+- A live test must still confirm Divi undo, responsive field values, and
+  save/reload behavior on supported versions.
+- Apply checks that the text has not changed while a draft was running, but this
+  check alone does not prove every editor-state behavior.
+
+## Features and release status
+
+- Image generation is not implemented. A separately billed OpenAI Image API
+  request would not prove Codex subscription-based image generation.
+- WordPress.org eligibility and approval are unknown. Passing Plugin Check does
+  not mean the plugin has been approved.
+- Trademark and plugin slug clearance have not been established.
+
+Treat staging results as evidence for the exact versions and host tested. They
+are not a production compatibility promise.
