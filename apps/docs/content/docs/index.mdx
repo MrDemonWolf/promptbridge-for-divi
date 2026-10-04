@@ -1,41 +1,55 @@
 ---
 title: Overview
-description: What PromptBridge does today, and what remains gated.
+description:
+  What the staging alpha can do, how to try it, and what still needs proof.
 ---
 
-PromptBridge for Divi is an independent WordPress plugin exploring a safe bridge
-between Divi 5 and an independently installed official Codex runtime.
+<aside className="docs-quick-take" role="note">
+	<p className="docs-quick-label">IN A MINUTE</p>
+	<p>
+		<strong>
+			PromptBridge adds an optional text-drafting action to Divi 5.
+		</strong>{' '}
+		Ask Codex to revise a Text module, review the separate draft, and choose
+		whether to apply it. This is a staging alpha, so test it on a staging site.
+	</p>
+</aside>
 
-## Current milestone
+## Start here
 
-The staging alpha provides:
+- [Setup](/docs/setup): install and configure the staging alpha.
+- [Architecture](/docs/architecture): see what happens after you request a
+  draft.
+- [Security and privacy](/docs/security): learn what text is sent and what is
+  stored.
 
-- safe activation when Divi or Codex is unavailable;
-- a dedicated administrator capability;
-- read-only PHP, WordPress, Divi, process, and runtime diagnostics;
-- fixed-argument, time-bounded local version probing;
-- a consent-gated model catalog refresh with a bounded, validated cache;
-- plain-language model usage estimates based on current ChatGPT token credit
-  rates;
-- explicit consent before any Codex child process can run; and
-- clean deactivation and uninstall behavior.
+## What works today
 
-The current staging evidence uses licensed/current Divi 5.13.1 and the real
-Codex CLI 0.155.1 at a server-owned path. The Divi browser UI placement and
-layout were checked. PromptBridge is exposed under a dedicated **Divi >
-PromptBridge** submenu when Divi's top-level menu is available, or under
-**Settings > PromptBridge** otherwise. Its General, Diagnostics, and Advanced
-tabs work, but the plugin still does not authenticate, generate content, or
-alter Divi controls.
+- Add a separate **Generate with PromptBridge** action to the Divi 5 Text
+  module's Body field.
+- Queue a text request for the server's separately installed Codex runtime.
+- Show the returned text in a preview. The editor must choose **Apply to Divi
+  field** before the page changes.
+- Let an administrator check the runtime and refresh the available model list
+  from the plugin settings.
 
-It does **not** authenticate, generate content, alter Divi controls, install
-Codex, or claim WordPress.org eligibility.
+An administrator must accept the current Terms of Use and acknowledge the
+Privacy Policy. They must also separately enable Codex service access before
+text can be sent for generation. See [Security and privacy](/docs/security).
 
-## Why the boundary is strict
+## What is not included or proven
 
-`codex app-server` is documented but experimental. Exact protocol support must
-be generated from a pinned Codex release and tested live before PromptBridge can
-rely on it. Divi control mutation also needs a version-specific acceptance test
-even though the licensed staging editor is now available.
+- PromptBridge does not install, update, or sign in to Codex.
+- Image generation is not implemented.
+- Production reliability, cPanel support, and all Divi save/undo behavior have
+  not been proven.
+- WordPress.org approval is not claimed.
 
-Read [Limitations](/docs/limitations) before evaluating this build.
+Read [Limitations and gates](/docs/limitations) before using the plugin on a
+live site.
+
+## Recorded staging check
+
+The latest documented staging check used licensed Divi 5.13.1 and Codex CLI
+0.155.1 installed at a server-owned path. This is evidence for that setup only;
+it does not prove compatibility with every host, account, or Divi version.
