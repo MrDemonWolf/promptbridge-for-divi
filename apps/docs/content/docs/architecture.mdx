@@ -1,46 +1,176 @@
 ---
 title: Architecture
-description: Planned boundaries and the narrow path implemented today.
+description: Follow a text request from the Divi field to its reviewed draft.
 ---
 
-## Implemented M1 path
+<aside className="docs-quick-take" role="note">
+	<p className="docs-quick-label">SHORT VERSION</p>
+	<p>
+		Divi sends a request to WordPress. WordPress checks permission and consent,
+		queues a private job, and runs Codex on the same server. You review the
+		draft before choosing whether to apply it.
+	</p>
+</aside>
 
-```text
-WordPress administrator
-  -> capability and nonce checks
-  -> local diagnostics
-  -> fixed argv version process
-  -> fixed `debug models --bundled` process
-  -> projected model catalog cache
-  -> escaped status output
-```
+## How a draft moves through PromptBridge
 
-The executable and dedicated Codex home come from server-owned constants in
-`wp-config.php`. Browser requests cannot choose an executable or add arguments.
-The model catalog refresh is explicit and consent-gated: **Run diagnostics** is
-the only trigger, with no background cron launch. It stores only the validated
-list-visible model projection in non-autoloaded `mdw_pbd_model_catalog`, keeps
-the last-good cache, and never stores the raw catalog.
+<figure className="architecture-flow-figure">
+	<figcaption className="architecture-flow-caption">
+		<span className="docs-quick-label">FIVE STEPS</span>
+		<strong>From your request to a draft you can review</strong>
+	</figcaption>
+	<ol className="architecture-flow" aria-label="Text generation flow">
+		<li>
+			<span className="architecture-flow-number" aria-hidden="true">
+				1
+			</span>
+			<div className="architecture-flow-copy">
+				<span className="architecture-flow-role">DIVI EDITOR</span>
+				<p className="architecture-flow-title">
+					<strong>You ask for a text change.</strong>
+				</p>
+				<p>
+					In a Divi Text module, choose Generate and enter an instruction. Your
+					page is not changed yet.
+				</p>
+			</div>
+		</li>
+		<li>
+			<span className="architecture-flow-number" aria-hidden="true">
+				2
+			</span>
+			<div className="architecture-flow-copy">
+				<span className="architecture-flow-role">WORDPRESS CHECKS</span>
+				<p className="architecture-flow-title">
+					<strong>WordPress checks who you are.</strong>
+				</p>
+				<p>
+					It checks that you can edit this page, that the administrator accepted
+					the current policies, and that service access is enabled.
+				</p>
+			</div>
+		</li>
+		<li>
+			<span className="architecture-flow-number" aria-hidden="true">
+				3
+			</span>
+			<div className="architecture-flow-copy">
+				<span className="architecture-flow-role">PRIVATE JOB</span>
+				<p className="architecture-flow-title">
+					<strong>WordPress queues the work.</strong>
+				</p>
+				<p>
+					The instruction and selected Text field content go into a private,
+					temporary job. WordPress Cron starts the worker.
+				</p>
+			</div>
+		</li>
+		<li>
+			<span className="architecture-flow-number" aria-hidden="true">
+				4
+			</span>
+			<div className="architecture-flow-copy">
+				<span className="architecture-flow-role">YOUR SERVER</span>
+				<p className="architecture-flow-title">
+					<strong>Your server runs Codex locally.</strong>
+				</p>
+				<p>
+					The worker uses the fixed Codex path and private home set by the site
+					owner. Codex communicates through a local input/output pipe, not a
+					public network port.
+				</p>
+			</div>
+		</li>
+		<li>
+			<span className="architecture-flow-number" aria-hidden="true">
+				5
+			</span>
+			<div className="architecture-flow-copy">
+				<span className="architecture-flow-role">YOU REVIEW</span>
+				<p className="architecture-flow-title">
+					<strong>You decide whether to apply it.</strong>
+				</p>
+				<p>
+					PromptBridge sanitizes the result and shows a separate preview. Apply
+					changes the Divi field only if it has not changed while the job was
+					running.
+				</p>
+			</div>
+		</li>
+	</ol>
+</figure>
 
-## Proposed generation path
+## Where the text goes
 
-```text
-Supported Divi field control
-  -> authenticated WordPress request
-  -> owned asynchronous job
-  -> pinned Codex app-server over local stdio
-  -> validated structured result
-  -> preview
-  -> explicit apply to Divi editor state
-```
+<figure className="architecture-boundary-figure">
+	<figcaption className="architecture-flow-caption">
+		<span className="docs-quick-label">DATA BOUNDARY</span>
+		<strong>What stays on your server and what leaves it</strong>
+	</figcaption>
+	<div className="architecture-boundary">
+		<section className="architecture-boundary-zone architecture-boundary-local">
+			<p className="architecture-flow-role">YOUR WORDPRESS SERVER</p>
+			<p>
+				<strong>Divi → WordPress job → local Codex process</strong>
+			</p>
+			<p>
+				The job is private. Codex runs from the site owner's configured path and
+				dedicated home.
+			</p>
+		</section>
+		<div className="architecture-boundary-transfer">
+			<span aria-hidden="true">→</span>
+			<p>Only after admin opt-in and an editor request</p>
+		</div>
+		<section className="architecture-boundary-zone architecture-boundary-external">
+			<p className="architecture-flow-role">OPENAI SERVICE</p>
+			<p>
+				<strong>Instruction + selected Text field</strong>
+			</p>
+			<p>
+				The separately installed Codex runtime uses the account signed in to its
+				dedicated home.
+			</p>
+		</section>
+	</div>
+	<p className="architecture-boundary-note">
+		Plugin activation and page load do not send this text to OpenAI. The
+		administrator must separately enable service access first.
+	</p>
+</figure>
 
-This second path is design work, not a feature claim. It remains disabled until
-the exact Codex and Divi versions pass live acceptance tests.
+## What works in the staging alpha
 
-## Protocol gate
+- An authorized administrator or editor can request a text draft for a Divi Text
+  module.
+- WordPress stores the request in a private job and rechecks permission and
+  consent before starting Codex.
+- Codex runs on the WordPress server with a read-only sandbox. PromptBridge
+  never runs generated PHP or JavaScript.
+- The editor sees an editable preview. The page changes only after the editor
+  chooses **Apply to Divi field**.
 
-The official
+## What still needs a live test
+
+The app-server protocol is experimental. Real account behavior, host
+compatibility, and Divi undo, responsive value, and save/reload behavior still
+need testing. See [Limitations and gates](/docs/limitations) before using this
+on a production site.
+
+## Plain-English glossary
+
+- **WordPress Cron:** WordPress's built-in scheduler. On a quiet site, a queued
+  job may wait until another visit triggers it. A host cron can trigger it on a
+  schedule.
+- **Dedicated Codex home:** A private folder for this site's Codex sign-in and
+  session files. It must be outside the public website folder.
+- **stdio:** A local input-and-output connection between WordPress and the Codex
+  process. It does not open a port for other computers.
+
+## Protocol detail for developers
+
+The
 [Codex app-server documentation](https://developers.openai.com/codex/app-server/)
-describes newline-delimited messages over stdio. The CLI reference still labels
-the command experimental, so PromptBridge must pin a version and generate its
-matching JSON Schema before implementing the PHP client.
+describes newline-delimited messages over stdio. The CLI still labels this
+command experimental, so pin and test the exact Codex version before relying on
+it in production.
