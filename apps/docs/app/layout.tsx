@@ -49,7 +49,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 				</a>
 				<RootProvider
 					search={{ enabled: false }}
-					theme={{ defaultTheme: 'dark' }}
+					theme={{ defaultTheme: 'system' }}
 				>
 					{children}
 				</RootProvider>

@@ -8,6 +8,7 @@ import {
 	ShieldCheck,
 } from 'lucide-react';
 import Link from 'next/link';
+import { ThemeSwitch } from 'fumadocs-ui/layouts/shared/slots/theme-switch';
 import { BrandLockup } from '../lib/brand-lockup';
 import { promptBridgeStructuredData } from '../lib/structured-data';
 
@@ -63,6 +64,7 @@ export default function HomePage() {
 					>
 						GitHub <ArrowUpRight size={15} aria-hidden="true" />
 					</a>
+					<ThemeSwitch className="marketing-theme-switch" mode="light-dark" />
 				</div>
 			</nav>
 
