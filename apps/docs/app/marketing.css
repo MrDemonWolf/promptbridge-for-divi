@@ -1234,6 +1234,12 @@
 	box-shadow: 0 1.4rem 3.5rem rgb(0 0 0 / 30%);
 }
 
+.dark .draft-card {
+	--ink: #091533;
+	--paper-light: #fffdf8;
+	border-color: #d7d4ca;
+}
+
 .dark .illustration-label,
 .dark .illustration-label span:last-child,
 .dark .workflow-illustration figcaption {
