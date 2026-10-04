@@ -1,8 +1,33 @@
-<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="promptbridge-title">
-	<title id="promptbridge-title">PromptBridge wolf and bridge mark</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+	<title id="title">PromptBridge prompt and bridge mark</title>
 	<rect x="3" y="3" width="58" height="58" rx="15" fill="#091533" />
-	<path fill="#0FACED" d="M11 23 9 8l14 10 9-5 9 5L55 8l-2 15 5 9-9 10-8 4H23l-8-4-9-10 5-9Z" />
-	<path fill="#091533" d="m14 28 11 2-6 6-7-5 2-3Zm36 0 2 3-7 5-6-6 11-2ZM27 37h10l-5 5-5-5Z" />
-	<path fill="#fff" d="M7 52Q32 33 57 52v7h-8v-3Q32 43 15 56v3H7v-7Z" />
-	<rect x="29" y="40" width="6" height="8" rx="2" fill="#0FACED" />
+	<path
+		fill="none"
+		stroke="#0FACED"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+		stroke-width="4"
+		d="m14 15 8 7-8 7"
+	/>
+	<path
+		fill="none"
+		stroke="#fff"
+		stroke-linecap="round"
+		stroke-width="4"
+		d="M30 17h19M30 25h13"
+	/>
+	<path
+		fill="none"
+		stroke="#fff"
+		stroke-linecap="round"
+		stroke-width="4"
+		d="M11 35h42M14 38v13m36-13v13M11 54h42"
+	/>
+	<path
+		fill="none"
+		stroke="#0FACED"
+		stroke-linecap="round"
+		stroke-width="4"
+		d="M15 51c4-8 10-13 17-13s13 5 17 13"
+	/>
 </svg>
