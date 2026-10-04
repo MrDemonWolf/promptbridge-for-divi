@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { BrandLockup } from '../lib/brand-lockup';
+import { promptBridgeStructuredData } from '../lib/structured-data';
 
 const safeguards = [
 	{
@@ -34,6 +35,15 @@ const safeguards = [
 export default function HomePage() {
 	return (
 		<div className="marketing-shell">
+			<script
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(promptBridgeStructuredData).replace(
+						/</g,
+						'\\u003c',
+					),
+				}}
+			/>
 			<div className="marketing-grid" aria-hidden="true" />
 
 			<nav className="marketing-nav" aria-label="Primary navigation">

@@ -19,20 +19,20 @@ const ibmPlexSans = IBM_Plex_Sans({
 });
 
 const description =
-	'Draft text for Divi 5 with a server-owned Codex runtime, administrator opt-in, and a separate review before applying.';
+	'PromptBridge for Divi is a staging-alpha WordPress plugin for drafting and reviewing AI text in Divi 5 with a server-managed Codex runtime.';
 
 export const metadata: Metadata = {
 	metadataBase: new URL('https://promptbridge.mrdemonwolf.dev/'),
 	title: {
-		default: 'PromptBridge',
+		default: 'PromptBridge for Divi | AI Text Drafting',
 		template: '%s | PromptBridge',
 	},
 	description,
 	openGraph: {
-		title: 'PromptBridge',
+		title: 'PromptBridge for Divi | AI Text Drafting',
 		description,
 		type: 'website',
-		siteName: 'PromptBridge',
+		siteName: 'PromptBridge for Divi',
 	},
 };
 
