@@ -17,8 +17,10 @@ description: Set up the staging alpha and safely test one Divi Text field.
 - WordPress 6.7 or newer
 - PHP 8.3 or newer
 - Divi 5
+- A trusted HTTPS URL for the Divi editor
 - A server where PHP <code>proc_open</code> is allowed
 - A server owner who can install Codex and edit <code>wp-config.php</code>
+- A Codex App Server that supports named permission profiles
 
 ## 1. Ask the server owner to prepare Codex
 
@@ -85,6 +87,9 @@ Use a disposable staging page so you can safely practice.
   <code>proc_open</code> is allowed.
 - **Request stays queued:** check WordPress Cron. On a low-traffic site, a host
   cron may be needed; see [cPanel setup](/docs/cpanel).
+- **Runtime cannot confirm restricted permissions:** check that the installed
+  Codex supports named permission profiles. PromptBridge stops before sending
+  the request text if the runtime cannot confirm the profile.
 - **You are unsure what gets sent:** read [Security and privacy](/docs/security)
   before enabling service access.
 

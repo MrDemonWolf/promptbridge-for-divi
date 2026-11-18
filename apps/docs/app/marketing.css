@@ -170,6 +170,15 @@
 	width: 0.54rem;
 }
 
+.marketing-hero-status {
+	background: rgb(7 95 135 / 6%);
+	border: 1px solid rgb(7 95 135 / 20%);
+	border-radius: 999px;
+	margin-bottom: 1.15rem;
+	padding: 0.42rem 0.72rem;
+	width: fit-content;
+}
+
 .marketing-shell h1,
 .marketing-shell h2,
 .marketing-shell h3,
@@ -185,6 +194,7 @@
 	line-height: 0.92;
 	margin: 0;
 	max-width: 13ch;
+	overflow-wrap: anywhere;
 }
 
 .marketing-shell h1 span {
@@ -196,6 +206,13 @@
 	letter-spacing: -0.065em;
 	line-height: 0.98;
 	margin-top: 0.14em;
+}
+
+.marketing-shell h1 .marketing-headline-lead {
+	color: var(--ink);
+	letter-spacing: -0.07em;
+	margin-top: 0;
+	text-wrap: balance;
 }
 
 .marketing-shell .marketing-lede {
@@ -1009,13 +1026,13 @@
 	}
 
 	.marketing-hero {
-		gap: 2.7rem;
-		padding-top: 3.5rem;
+		gap: 2.25rem;
+		padding-top: 3rem;
 	}
 
 	.marketing-shell h1 {
-		font-size: clamp(3.1rem, 14.4vw, 4.6rem);
-		max-width: 10.5ch;
+		font-size: clamp(2.35rem, 12.8vw, 4.6rem);
+		max-width: none;
 	}
 
 	.marketing-shell .marketing-lede {
@@ -1188,6 +1205,11 @@
 
 .dark .marketing-nav {
 	border-bottom-color: rgb(208 224 246 / 14%);
+}
+
+.dark .marketing-hero-status {
+	background: rgb(15 172 237 / 8%);
+	border-color: rgb(15 172 237 / 24%);
 }
 
 .dark .marketing-brand .brand-lockup-descriptor {

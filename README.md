@@ -25,6 +25,8 @@ Prove the boundary before trusting it.
   escaped, redacted output.
 - **Explicit consent** - Blocks Codex launch until an administrator reviews the
   service disclosure and opts in.
+- **Divi text drafts** - Adds a separate action to draft text for a Divi 5 Text
+  module, with a preview before the editor applies it.
 - **Model catalog cache** - An explicit diagnostics run discovers only
   list-visible API models, validates a small projection, and preserves the
   last-good result without storing the raw catalog.
@@ -36,8 +38,8 @@ Prove the boundary before trusting it.
   deploys documentation, opens dependency updates, and publishes tagged releases
   that WordPress can discover through its native update system.
 
-This staging alpha does not authenticate, generate content, alter Divi controls,
-or claim WordPress.org approval. See the
+Text generation uses a Codex account already signed in to the site's dedicated
+runtime home. The Divi workflow still needs live staging verification. See the
 [current limitations](apps/docs/content/docs/limitations.mdx).
 
 ## Getting Started
@@ -48,21 +50,25 @@ architecture, compatibility, privacy, hosting, and testing guidance lives in
 
 1. Download a ZIP produced by CI or a tagged GitHub Release.
 2. Upload and activate it in WordPress.
-3. Have the server owner install Codex independently.
+3. Have the server owner install Codex independently and sign in using the
+   site's dedicated Codex home.
 4. Add the two server-owned constants shown below.
-5. Open **Settings > PromptBridge**, review consent, and run diagnostics.
+5. Open **Divi > PromptBridge**, or **Settings > PromptBridge** when Divi's menu
+   is unavailable. Review consent and run diagnostics.
+6. Follow the
+   [Chrome staging checklist](docs/TESTING.md#local-chrome-smoke-test) to test a
+   draft from generation through save and reload.
 
 Run diagnostics is the only model-catalog refresh trigger. After consent, it
 executes the fixed `codex debug models --bundled` command; it does not launch a
 background cron job. The response is capped at 2 MB, strictly projected and
 validated, and stored in the non-autoloaded `mdw_pbd_model_catalog` option. Only
-list-visible API models are cached. The raw 443 KB catalog is never stored, and
-a failed refresh keeps the last-good cache.
+list-visible API models are cached. A failed refresh keeps the last-good cache.
 
-The current local Codex 0.155.1 result contains five models: Astra, Sol, Terra,
-Luna, and 5.5. Luna is the default and fallback model. The selector labels each
-model's estimated ChatGPT token credit rate relative to Luna and links to the
-current OpenAI pricing page; actual use still depends on the task and context.
+The list depends on the installed Codex version. Luna is the bundled default and
+fallback model. The selector shows each model's estimated ChatGPT token credit
+rate relative to Luna and links to OpenAI pricing. Actual usage depends on the
+task and context.
 
 ## Usage
 

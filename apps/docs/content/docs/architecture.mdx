@@ -145,8 +145,8 @@ description: Follow a text request from the Divi field to its reviewed draft.
   module.
 - WordPress stores the request in a private job and rechecks permission and
   consent before starting Codex.
-- Codex runs on the WordPress server with a read-only sandbox. PromptBridge
-  never runs generated PHP or JavaScript.
+- Before submitting the draft request, PromptBridge checks that Codex confirms a
+  restricted read-only profile with network access off for sandboxed tools.
 - The editor sees an editable preview. The page changes only after the editor
   chooses **Apply to Divi field**.
 

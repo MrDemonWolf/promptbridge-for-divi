@@ -53,12 +53,38 @@ bin/build-zip.sh
 - [ ] Framing errors, malformed events, crashes, timeout, and uncertain
       completion.
 - [ ] Duplicate jobs, locks, owner isolation, cancellation, and cleanup.
-- [ ] One real subscription-backed text result (LocalWP returned HTTP 401
-      because the dedicated home is not authenticated).
+- [ ] One real subscription-backed text result. An earlier Local run returned
+      HTTP 401 before the dedicated home was signed in.
 - [ ] Exact licensed Divi control behavior without double-triggering hosted AI.
 - [ ] Preview, baseline conflict rejection, apply, undo, save, and reload.
 - [ ] Same-client image feasibility and real-file validation.
 - [ ] Target cPanel process, filesystem, and cron behavior.
+
+## Local Chrome smoke test
+
+1. Start **PromptBridge Divi Test** in Local. Use **Trust** next to the site's
+   SSL certificate, then open `https://promptbridge-divi-test.local/wp-admin/`
+   in Chrome. The editor's integrity check requires a secure browser context.
+2. Check sign-in using the site's dedicated Codex home.
+
+   ```bash
+   CODEX_HOME="$HOME/Sites/promptbridge-divi-test/codex-home" codex login status
+   ```
+
+3. In **Divi > PromptBridge**, confirm the administrator's policy choices and
+   service access, then select **Run diagnostics**. Record the exact WordPress,
+   Divi, PHP, and Codex versions.
+4. Open a disposable page in the Visual Builder, such as the **PromptBridge
+   Chrome smoke test** draft. If Chrome has an older build cached, hard reload
+   the builder. Add a Text module with `Local test copy.` in its Body field.
+   Select **Generate with PromptBridge** and enter
+   `Write one sentence welcoming visitors to this demo.`
+5. Confirm that the draft appears in the preview and the original Body remains
+   until **Apply to Divi field**. Verify undo, apply again, save as a draft, and
+   reload the builder. Check that the edited Body persisted.
+
+If the request stays queued, check WordPress Cron. If Codex returns an
+authentication error, sign in again using the dedicated home from step 2.
 
 Mocks are useful for isolated logic only. They are not evidence for Divi,
 cPanel, account, image, or WordPress.org behavior.

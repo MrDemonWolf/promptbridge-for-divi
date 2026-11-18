@@ -71,25 +71,25 @@ export default function HomePage() {
 			<main id="nd-page">
 				<header id="top" className="marketing-hero">
 					<div className="marketing-hero-copy">
-						<p className="marketing-eyebrow">
+						<p className="marketing-eyebrow marketing-hero-status">
 							<span className="marketing-status-dot" aria-hidden="true" />
 							Divi 5 <span aria-hidden="true">/</span> Staging alpha
 						</p>
 						<h1>
-							Prompt in Divi.
+							<span className="marketing-headline-lead">Prompt in Divi.</span>
 							<span>Review before you apply.</span>
 						</h1>
 						<p className="marketing-lede">
-							PromptBridge adds a Codex-powered text workflow to the Divi 5 Text
-							module. Your server runs its own Codex install; you review each
-							draft before it reaches the page.
+							Use your server’s Codex install to draft text in Divi 5’s Text
+							module. Review each suggestion before choosing what reaches your
+							page.
 						</p>
 						<div className="marketing-actions">
 							<Link
 								className="marketing-button marketing-button-primary"
 								href="/docs/setup"
 							>
-								Explore the setup <ArrowRight size={17} aria-hidden="true" />
+								Read the setup guide <ArrowRight size={17} aria-hidden="true" />
 							</Link>
 							<a
 								className="marketing-button marketing-button-secondary"
@@ -101,10 +101,9 @@ export default function HomePage() {
 						<p className="marketing-disclosure">
 							<ShieldCheck size={19} aria-hidden="true" />
 							<span>
-								<strong>Know where your text goes.</strong> After administrator
-								opt-in, generation sends your prompt and selected Text field
-								content to OpenAI through the separately installed Codex
-								runtime.{' '}
+								<strong>Know where your text goes.</strong> With administrator
+								consent, your prompt and selected Text field content go to
+								OpenAI through the server’s separately installed Codex runtime.{' '}
 								<Link href="/docs/security">Read the privacy details.</Link>
 							</span>
 						</p>
