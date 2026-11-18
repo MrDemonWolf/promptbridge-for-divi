@@ -112,7 +112,7 @@ final class Plugin {
 	 * Deactivation restores hooks without deleting generated WordPress content.
 	 */
 	public static function deactivate(): void {
-		wp_clear_scheduled_hook( 'mdw_pbd_process_jobs' );
+		wp_unschedule_hook( 'mdw_pbd_process_jobs' );
 		wp_clear_scheduled_hook( 'mdw_pbd_cleanup_jobs' );
 	}
 

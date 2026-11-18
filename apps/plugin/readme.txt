@@ -112,6 +112,14 @@ Automatic installation remains under the site owner's WordPress settings.
 
 == Changelog ==
 
+= Unreleased =
+
+* Preserve backslashes in prompts, field content, and generated text.
+* Prevent duplicate processing of the same generation job.
+* Poll generation status on sites that use plain permalinks.
+* Remove pending generation events during deactivation and uninstall.
+* Require Codex to confirm the restricted permission profile before generation.
+
 = 0.1.0-alpha.1 =
 
 * Add safe activation, owner capability, local diagnostics, consent, and clean uninstall.

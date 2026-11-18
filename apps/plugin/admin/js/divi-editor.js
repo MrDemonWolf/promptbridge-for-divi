@@ -54,9 +54,9 @@
 		return data;
 	};
 
-	const waitForResult = async (jobId) => {
+	const waitForResult = async (statusUrl) => {
 		for (let attempt = 0; attempt < 60; attempt += 1) {
-			const job = await request(`${MDW_PBD_EDITOR.jobsUrl}/${jobId}`, {
+			const job = await request(statusUrl, {
 				method: 'GET',
 			});
 			if (job.state === 'complete') return job.result;
@@ -160,7 +160,7 @@
 				baselineDigest: await digest(baseline),
 			}),
 		});
-		const result = await waitForResult(created.id);
+		const result = await waitForResult(created.statusUrl);
 		showPreview(moduleId, baseline, result);
 	};
 

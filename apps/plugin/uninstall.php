@@ -15,7 +15,7 @@ $mdw_pbd_cleanup_site = static function (): void {
 	delete_option( 'mdw_pbd_settings' );
 	delete_option( 'mdw_pbd_model_catalog' );
 	delete_option( 'mdw_pbd_version' );
-	wp_clear_scheduled_hook( 'mdw_pbd_process_jobs' );
+	wp_unschedule_hook( 'mdw_pbd_process_jobs' );
 	wp_clear_scheduled_hook( 'mdw_pbd_cleanup_jobs' );
 
 	$mdw_pbd_jobs = get_posts(

@@ -29,12 +29,41 @@ final class App_Server {
 		if ( ! preg_match( '/\A[a-zA-Z0-9][a-zA-Z0-9._-]{0,99}\z/', $model ) ) {
 			return $this->failure( 'invalid_model' );
 		}
-		if ( ! is_file( $executable ) || ! is_executable( $executable ) || ! is_dir( $codex_home ) ) {
+		$executable = realpath( $executable );
+		if ( false === $executable || ! is_file( $executable ) || ! is_executable( $executable ) || ! is_dir( $codex_home ) ) {
 			return $this->failure( 'runtime_unavailable' );
 		}
 
+		$executable_rule = json_encode( $executable, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ); // phpcs:ignore WordPress.WP.AlternativeFunctions.json_encode_json_encode -- TOML accepts this quoted string.
+		if ( false === $executable_rule ) {
+			return $this->failure( 'runtime_unavailable' );
+		}
+		// A unique name prevents Codex from merging a configured profile into this one.
+		$profile = 'mdw_promptbridge_' . bin2hex( random_bytes( 16 ) );
+
 		$process = @proc_open( // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged,WordPress.PHP.DiscouragedPHPFunctions.system_calls_proc_open -- Fixed argv, no shell; failure is returned safely.
-			array( $executable, 'app-server', '--listen', 'stdio://' ),
+			array(
+				$executable,
+				'app-server',
+				'--listen',
+				'stdio://',
+				'-c',
+				'default_permissions="' . $profile . '"',
+				'-c',
+				'permissions.' . $profile . '.filesystem={":minimal"="read",' . $executable_rule . '="read"}',
+				'-c',
+				'permissions.' . $profile . '.network.enabled=false',
+				'-c',
+				'web_search="disabled"',
+				'--disable',
+				'shell_tool',
+				'--disable',
+				'hooks',
+				'--disable',
+				'plugins',
+				'--disable',
+				'apps',
+			),
 			array(
 				0 => array( 'pipe', 'r' ),
 				1 => array( 'pipe', 'w' ),
@@ -68,11 +97,12 @@ final class App_Server {
 				'id'     => 1,
 				'method' => 'initialize',
 				'params' => array(
-					'clientInfo' => array(
+					'clientInfo'   => array(
 						'name'    => 'mdw_promptbridge',
 						'title'   => 'PromptBridge for Divi',
 						'version' => '0.1.0',
 					),
+					'capabilities' => array( 'experimentalApi' => true ),
 				),
 			);
 			if ( ! $this->send( $pipes[0], $initialize ) ) {
@@ -112,7 +142,7 @@ final class App_Server {
 							return $this->failure( 'protocol_error' );
 						}
 						if ( ! is_array( $message ) || isset( $message['error'] ) ) {
-							return $this->failure( 'protocol_error' );
+								return $this->failure( 2 === ( $message['id'] ?? null ) ? 'sandbox_unavailable' : 'protocol_error' );
 						}
 						if ( 1 === ( $message['id'] ?? null ) ) {
 							$start_thread = array(
@@ -122,7 +152,8 @@ final class App_Server {
 									'model'          => $model,
 									'cwd'            => $codex_home,
 									'approvalPolicy' => 'never',
-									'sandbox'        => 'read-only',
+									'permissions'    => $profile,
+									'ephemeral'      => true,
 								),
 							);
 							$initialized  = array(
@@ -133,28 +164,27 @@ final class App_Server {
 								return $this->failure( 'protocol_error' );
 							}
 						} elseif ( 2 === ( $message['id'] ?? null ) ) {
+								$confirmed_profile = $message['result']['activePermissionProfile']['id'] ?? null;
+							if ( $profile !== $confirmed_profile
+									|| null !== ( $message['result']['activePermissionProfile']['extends'] ?? null )
+									|| 'never' !== ( $message['result']['approvalPolicy'] ?? null )
+									|| 'readOnly' !== ( $message['result']['sandbox']['type'] ?? null )
+									|| false !== ( $message['result']['sandbox']['networkAccess'] ?? null ) ) {
+								return $this->failure( 'sandbox_unavailable' );
+							}
 							$thread     = $message['result']['thread']['id'] ?? '';
 							$start_turn = array(
 								'id'     => 3,
 								'method' => 'turn/start',
 								'params' => array(
-									'threadId'       => $thread,
-									'input'          => array(
+									'threadId' => $thread,
+									'input'    => array(
 										array(
 											'type' => 'text',
 											'text' => $prompt,
 										),
 									),
-									'sandboxPolicy'  => array(
-										'type'   => 'readOnly',
-										'access' => array(
-											'type' => 'restricted',
-											'includePlatformDefaults' => true,
-											'readableRoots' => array(),
-										),
-									),
-									'approvalPolicy' => 'never',
-									'model'          => $model,
+									'model'    => $model,
 								),
 							);
 							if ( ! is_string( $thread ) || '' === $thread || ! $this->send( $pipes[0], $start_turn ) ) {
